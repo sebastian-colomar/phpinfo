@@ -78,6 +78,7 @@ objects:
       name: phpinfo-route
     spec:
       tls:
+        insecureEdgeTerminationPolicy: Redirect
         termination: edge
       to:
         kind: Service
