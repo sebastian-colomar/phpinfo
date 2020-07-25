@@ -3,8 +3,8 @@ apiVersion: template.openshift.io/v1
 metadata:
   annotations:
     description: >-
-      PHP info
-    openshift.io/display-name: 'PHP info'
+      PHP Info
+    openshift.io/display-name: 'PHP Info'
     openshift.io/provider-display-name: 'Sebastian Colomar'
     tags: 'php,phpinfo'
     version: '1.1'
@@ -13,13 +13,13 @@ metadata:
   namespace: php-dev-0
   labels:
     app: phpinfo
-message: 'PHPinfo is now deployed to https://${ROUTE_HOSTNAME}.'
+message: 'PHPinfo is now deployed.'
 objects:
   -
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: php
+      name: phpinfo
     spec:
       replicas: 1
       selector:
