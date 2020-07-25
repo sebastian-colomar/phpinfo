@@ -53,6 +53,21 @@ objects:
                 cpu: '${CPU_REQUEST}'
                 memory: '${MEMORY_REQUEST}'
   -
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: phpinfo-netpol
+    spec:
+      podSelector:
+        matchLabels:
+          app: phpinfo
+      ingress:
+        -
+          ports:
+            -
+              protocol: TCP
+              port: 8080
+  -
     apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
@@ -101,5 +116,5 @@ parameters:
   - name: MEMORY_LIMIT
     displayName: Memory limit
     description: The amount of memory each container is limited to use.
-    value: 256Mi
+    value: 128Mi
     required: true
