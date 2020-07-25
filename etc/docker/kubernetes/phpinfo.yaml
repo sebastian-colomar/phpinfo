@@ -1,0 +1,76 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpinfo
+  template:
+    metadata:
+      labels:
+        app: phpinfo
+    spec:
+      containers:
+      -
+        image: secobau/phpinfo:1.0
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+        name: phpinfo-container
+        ports:
+          -
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1
+        resources:
+          limits:
+            cpu: 1.0
+            memory: 128Mi
+          requests:
+            cpu: 0.1
+            memory: 16Mi
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: phpinfo-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: phpinfo
+  ingress:
+    -
+      ports:
+        -
+          port: 8080
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: phpinfo
+  name: phpinfo-svc
+spec:
+  ports:
+    -
+      nodePort: 30000
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: phpinfo
+  type: NodePort
+---
