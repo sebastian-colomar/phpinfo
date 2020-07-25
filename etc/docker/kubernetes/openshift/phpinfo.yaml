@@ -7,13 +7,11 @@ metadata:
     openshift.io/display-name: 'PHP Info'
     openshift.io/provider-display-name: 'Sebastian Colomar'
     tags: 'php,phpinfo'
-    version: '1.1'
-  selfLink: /apis/template.openshift.io/v1/namespaces/openshift/templates/phpinfo
-  name: phpinfo
-  namespace: php-dev-0
+    version: '1.0'
+  name: phpinfo-template
   labels:
     app: phpinfo
-message: 'PHPinfo is now deployed.'
+message: 'PHP Info is now deployed.'
 objects:
   -
     apiVersion: apps/v1
@@ -38,7 +36,7 @@ objects:
                 path: /
                 port: 8080
               initialDelaySeconds: 30
-            name: phpinfo
+            name: phpinfo-container
             ports:
               -
                 containerPort: 8080
@@ -62,20 +60,20 @@ objects:
         console.alpha.openshift.io/overview-app-route: 'true'
       labels:
         app: phpinfo
-      name: phpinfo
+      name: phpinfo-route
     spec:
       tls:
         termination: edge
       to:
         kind: Service
-        name: phpinfo
+        name: phpinfo-svc
   -
     apiVersion: v1
     kind: Service
     metadata:
       labels:
         app: phpinfo
-      name: phpinfo
+      name: phpinfo-svc
     spec:
       ports:
         -
@@ -88,12 +86,12 @@ parameters:
   - name: CPU_REQUEST
     displayName: CPU request
     description: The amount of CPU to request for each container.
-    value: '0.2'
+    value: '0.1'
     required: true
   - name: MEMORY_REQUEST
     displayName: Memory request
     description: The amount of memory required for each container to run.
-    value: 64Mi
+    value: 16Mi
     required: true
   - name: CPU_LIMIT
     displayName: CPU limit
