@@ -19,7 +19,7 @@ objects:
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: phpinfo
+      name: phpinfo-deploy
     spec:
       replicas: 1
       selector:
@@ -32,7 +32,7 @@ objects:
         spec:
           containers:
           -
-            image: secobau/php:1.1
+            image: secobau/phpinfo:1.0
             livenessProbe:
               httpGet:
                 path: /
