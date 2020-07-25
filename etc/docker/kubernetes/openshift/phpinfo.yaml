@@ -1,0 +1,107 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  annotations:
+    description: >-
+      PHP info
+    openshift.io/display-name: 'PHP info'
+    openshift.io/provider-display-name: 'Sebastian Colomar'
+    tags: 'php,phpinfo'
+    version: '1.1'
+  selfLink: /apis/template.openshift.io/v1/namespaces/openshift/templates/phpinfo
+  name: phpinfo
+  namespace: php-dev-0
+  labels:
+    app: phpinfo
+message: 'PHPinfo is now deployed to https://${ROUTE_HOSTNAME}.'
+objects:
+  -
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: php
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: phpinfo
+      template:
+        metadata:
+          labels:
+            app: phpinfo
+        spec:
+          containers:
+          -
+            image: secobau/php:1.1
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 30
+            name: phpinfo
+            ports:
+              -
+                containerPort: 8080
+            readinessProbe:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 1
+            resources:
+              limits:
+                cpu: '${CPU_LIMIT}'
+                memory: '${MEMORY_LIMIT}'
+              requests:
+                cpu: '${CPU_REQUEST}'
+                memory: '${MEMORY_REQUEST}'
+  -
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      annotations:
+        console.alpha.openshift.io/overview-app-route: 'true'
+      labels:
+        app: phpinfo
+      name: phpinfo
+    spec:
+      tls:
+        termination: edge
+      to:
+        kind: Service
+        name: phpinfo
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: phpinfo
+      name: phpinfo
+    spec:
+      ports:
+        -
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: phpinfo
+parameters:
+  - name: CPU_REQUEST
+    displayName: CPU request
+    description: The amount of CPU to request for each container.
+    value: '0.2'
+    required: true
+  - name: MEMORY_REQUEST
+    displayName: Memory request
+    description: The amount of memory required for each container to run.
+    value: 64Mi
+    required: true
+  - name: CPU_LIMIT
+    displayName: CPU limit
+    description: The amount of CPU each container is limited to use.
+    value: '1.0'
+    required: true
+  - name: MEMORY_LIMIT
+    displayName: Memory limit
+    description: The amount of memory each container is limited to use.
+    value: 256Mi
+    required: true
