@@ -65,8 +65,8 @@ objects:
         -
           ports:
             -
-              protocol: TCP
               port: 8080
+              protocol: TCP
   -
     apiVersion: route.openshift.io/v1
     kind: Route
@@ -98,23 +98,23 @@ objects:
       selector:
         app: phpinfo
 parameters:
-  - name: CPU_REQUEST
-    displayName: CPU request
-    description: The amount of CPU to request for each container.
-    value: '0.1'
-    required: true
-  - name: MEMORY_REQUEST
-    displayName: Memory request
-    description: The amount of memory required for each container to run.
-    value: 16Mi
-    required: true
   - name: CPU_LIMIT
     displayName: CPU limit
     description: The amount of CPU each container is limited to use.
     value: '1.0'
     required: true
+  - name: CPU_REQUEST
+    displayName: CPU request
+    description: The amount of CPU to request for each container.
+    value: '0.1'
+    required: true
   - name: MEMORY_LIMIT
     displayName: Memory limit
     description: The amount of memory each container is limited to use.
     value: 128Mi
+    required: true
+  - name: MEMORY_REQUEST
+    displayName: Memory request
+    description: The amount of memory required for each container to run.
+    value: 16Mi
     required: true
