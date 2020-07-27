@@ -33,5 +33,7 @@ jobs:
         sed -i s/worker/manager/ $compose
         docker swarm init
         docker stack deploy -c $compose test
+        sleep 60 && docker stack ps test --no-trunc
+        sleep 60 && docker stack ps test --no-trunc      
         chmod +x $script
-        ./$script
+        #./$script
