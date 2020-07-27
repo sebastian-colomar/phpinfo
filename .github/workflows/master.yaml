@@ -34,6 +34,5 @@ jobs:
         sed -i /cpus/d $compose
         docker swarm init
         docker stack deploy -c $compose test
-        sleep 100 && docker stack ps test --no-trunc      
         chmod +x $script
         ./$script
