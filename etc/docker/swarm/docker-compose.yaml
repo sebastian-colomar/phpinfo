@@ -17,7 +17,7 @@ services:
     healthcheck:
       interval: 10s
       start_period: 30s
-      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      test: php -r "print file_get_contents('http://localhost:8080/');"
       timeout: 1s
     ports:
     - "30000:8080"
