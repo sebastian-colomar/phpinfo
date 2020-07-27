@@ -37,10 +37,10 @@ spec:
         resources:
           limits:
             cpu: '0.001'
-            memory: '16Mi'
+            memory: '32Mi'
           requests:
             cpu: '0.001'
-            memory: '64Mi'
+            memory: '16Mi'
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
