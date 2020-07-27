@@ -28,11 +28,15 @@ jobs:
       run: |
         set -x
         compose=etc/docker/swarm/docker-compose.yaml
+        date=$( date +%s )
         script=.github/bin/check-service.sh
         test -d run && sudo cp -rv ./run/* /run
         sed -i s/worker/manager/ $compose
+        sed -i /secobau/s/image.*$/image:${date}/ $compose
         sed -i /cpus/d $compose
+        cat $compose
         docker swarm init
-        docker stack deploy -c $compose test
+        docker build -t ${date} --no-cache .
+        docker stack deploy -c ${compose} test
         chmod +x $script
         ./$script
