@@ -31,6 +31,7 @@ jobs:
         script=.github/bin/check-service.sh
         test -d run && sudo cp -rv ./run/* /run
         sed -i s/worker/manager/ $compose
+        sed -i /cpus/d $compose
         docker swarm init
         docker stack deploy -c $compose test
         sleep 100 && docker stack ps test --no-trunc      
