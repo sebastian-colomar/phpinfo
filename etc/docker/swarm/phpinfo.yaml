@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   php:
-    image: secobau/php:1.1
+    image: secobau/phpinfo:1.1
     deploy:
       replicas: 1
       resources:
