@@ -118,13 +118,13 @@ parameters:
     displayName: CPU limit
     name: CPU_LIMIT
     required: true
-    value: '0.2'
+    value: '1m'
   -
     description: The amount of CPU to request for each container.
     displayName: CPU request
     name: CPU_REQUEST
     required: true
-    value: '0.1'
+    value: '1m'
   -
     description: The amount of memory each container is limited to use.
     displayName: Memory limit
