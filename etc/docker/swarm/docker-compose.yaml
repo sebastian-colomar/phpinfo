@@ -9,10 +9,10 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: 1m
+          cpus: "1m"
           memory: 32Mi
         reservations:
-          cpus: 0.5m
+          cpus: "0.5m"
           memory: 16Mi
     healthcheck:
       interval: 10s
