@@ -32,7 +32,7 @@ jobs:
         script=.github/bin/check-service.sh
         test -d run && sudo cp -rv ./run/* /run
         sed -i s/worker/manager/ $compose
-        sed -i /secobau/s/image.*$/image:${date}/ $compose
+        sed -i /secobau/s/image.*$/image:' '${date}/ $compose
         sed -i /cpus/d $compose
         cat $compose
         docker swarm init
