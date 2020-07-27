@@ -112,19 +112,19 @@ parameters:
     displayName: Application Version
     name: APP_VERSION
     required: true
-    value: '1.2'
+    value: 'latest'
   -
     description: The amount of CPU each container is limited to use.
     displayName: CPU limit
     name: CPU_LIMIT
     required: true
-    value: '1m'
+    value: '0.001'
   -
     description: The amount of CPU to request for each container.
     displayName: CPU request
     name: CPU_REQUEST
     required: true
-    value: '1m'
+    value: '0.001'
   -
     description: The amount of memory each container is limited to use.
     displayName: Memory limit
