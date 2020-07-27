@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  php:
+    image: secobau/php:1.1
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: 1m
+          memory: 32Mi
+        reservations:
+          cpus: 0.5m
+          memory: 16Mi
+    healthcheck:
+      interval: 10s
+      start_period: 30s
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      timeout: 1s
+    placement:
+      constraints:
+      - node.role == worker
+    ports:
+    - "30000:8080"
