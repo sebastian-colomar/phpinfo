@@ -112,7 +112,7 @@ parameters:
     displayName: Application Version
     name: APP_VERSION
     required: true
-    value: '1.1'
+    value: '1.2'
   -
     description: The amount of CPU each container is limited to use.
     displayName: CPU limit

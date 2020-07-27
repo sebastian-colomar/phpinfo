@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       -
-        image: secobau/phpinfo:latest
+        image: secobau/phpinfo:1.2
         livenessProbe:
           httpGet:
             path: /
@@ -36,10 +36,10 @@ spec:
           initialDelaySeconds: 1
         resources:
           limits:
-            cpu: '0.2'
+            cpu: '0.001'
             memory: '16Mi'
           requests:
-            cpu: '0.2'
+            cpu: '0.001'
             memory: '64Mi'
 ---
 apiVersion: networking.k8s.io/v1

@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   php:
-    image: secobau/phpinfo:latest
+    image: secobau/phpinfo:1.2
     deploy:
       placement:
         constraints:
@@ -9,10 +9,10 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "0.01"
+          cpus: "0.001"
           memory: 32Mi
         reservations:
-          cpus: "0.01"
+          cpus: "0.001"
           memory: 16Mi
     healthcheck:
       interval: 10s
