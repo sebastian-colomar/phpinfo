@@ -11,15 +11,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: phpinfo
+      app: phpinfo-po
   template:
     metadata:
       labels:
-        app: phpinfo
+        app: phpinfo-po
     spec:
       containers:
       -
-        image: secobau/phpinfo:latest
+        image: secobau/phpinfo:1.4
         livenessProbe:
           httpGet:
             path: /
@@ -49,7 +49,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: phpinfo
+      app: phpinfo-po
   ingress:
     -
       ports:
@@ -60,10 +60,6 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  annotations:
-    console.alpha.openshift.io/overview-app-route: 'true'
-  labels:
-    app: phpinfo
   name: phpinfo-route
 spec:
   tls:
@@ -76,8 +72,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: phpinfo
   name: phpinfo-svc
 spec:
   ports:
@@ -86,5 +80,5 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: phpinfo
+    app: phpinfo-po
 ---
