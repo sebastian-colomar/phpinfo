@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   php:
-    image: secobau/phpinfo:latest
+    image: secobau/phpinfo:1.5
     deploy:
       placement:
         constraints:
