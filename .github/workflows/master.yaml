@@ -27,7 +27,7 @@ jobs:
       #id: test
       run: |
         set -x
-        compose=etc/docker/swarm/docker-compose.yaml
+        compose=etc/docker/swarm/phpinfo.yaml
         date=$( date +%s )
         script=.github/bin/check-service.sh
         test -d run && sudo cp -rv ./run/* /run
