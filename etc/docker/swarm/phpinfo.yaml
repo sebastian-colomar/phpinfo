@@ -20,4 +20,4 @@ services:
       test: php -r "print file_get_contents('http://localhost:8080/');"
       timeout: 1s
     ports:
-    - "30000:8080"
+    - "30001:8080"
