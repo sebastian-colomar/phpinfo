@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       -
-        image: secobau/phpinfo:latest
+        image: secobau/phpinfo:1.6
         livenessProbe:
           httpGet:
             path: /
