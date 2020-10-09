@@ -1,6 +1,5 @@
-version: "3.8"
 services:
-  php:
+  phpinfo-svc:
     image: secobau/phpinfo:latest
     deploy:
       placement:
@@ -9,15 +8,14 @@ services:
       replicas: 1
       resources:
         limits:
-#          cpus: "0.001"
           memory: 32Mi
         reservations:
-#          cpus: "0.001"
-          memory: 16Mi
+          memory: 32Mi
     healthcheck:
       interval: 10s
       start_period: 30s
       test: php -r "print file_get_contents('http://localhost:8080/');"
       timeout: 1s
     ports:
-    - "30001:8080"
+    - "8080:8080"
+version: "3.8"
