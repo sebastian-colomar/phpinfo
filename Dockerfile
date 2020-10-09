@@ -2,7 +2,12 @@
 #      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
 #      SPDX-License-Identifier:  GPL-2.0-only                           #
 #########################################################################
-FROM alpine/git:latest AS clone
+
+ARG image=alpine/git
+ARG version=1.0.20
+ARG digest=@sha256:f6f0b39d654c58a4474f458241b73ca7539bf511a4906450d5462c6a1fd004ca
+
+FROM $image:$version$digest AS clone
 
 ARG dir=/clone-folder
 ARG hostname=github.com
