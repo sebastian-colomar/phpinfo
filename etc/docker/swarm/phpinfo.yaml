@@ -1,6 +1,6 @@
 services:
   phpinfo-svc:
-    image: secobau/phpinfo:latest
+    image: secobau/phpinfo:1.6
     deploy:
       placement:
         constraints:
