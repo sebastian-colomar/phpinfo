@@ -16,6 +16,8 @@ sudo docker build --file Dockerfile --tag library/alpine:test-dockerfile /mnt/
 ```
 CREATE THE CONTAINER FROM THAT IMAGE:
 ```
+ENTRYPOINT=php
+CMD=' -f phpinfo/src/index.php -S 0.0.0.0:8080 '
 sudo docker run --detach --entrypoint ${ENTRYPOINT} --name test --publish 80:8080 --tty library/alpine:test-dockerfile ${CMD}
 ```
 FROM THE VM:
