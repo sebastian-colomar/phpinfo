@@ -20,8 +20,8 @@ TAG=test-dockerfile-volumes
 VOLUME=phpinfo/src
 WORKDIR=/tmp
 
-CMD=" -f ${VOLUME}/index.php -S 0.0.0.0:8080 "
-sudo docker run --detach --entrypoint ${ENTRYPOINT} --name ${NAME} --publish ${PUBLISH} --volume ${PWD}/${VOLUME}/:${WORKDIR}/${VOLUME}/:ro --workdir ${WORKDIR} ${IMAGE}:${TAG} ${CMD}
+CMD=" -f index.php -S 0.0.0.0:8080 "
+sudo docker run --detach --entrypoint ${ENTRYPOINT} --name ${NAME} --publish ${PUBLISH} --volume ${PWD}/${VOLUME}/:${WORKDIR}/:ro --workdir ${WORKDIR} ${IMAGE}:${TAG} ${CMD}
 ```
 FROM THE VM:
 ```
