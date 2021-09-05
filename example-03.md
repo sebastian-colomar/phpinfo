@@ -14,7 +14,8 @@ git clone https://github.com/academiaonline/phpinfo
 
 ENTRYPOINT=php
 CMD=" -f phpinfo/src/index.php -S 0.0.0.0:8080 "
-sudo docker run --detach --entrypoint ${ENTRYPOINT} --name test --publish 80:8080 --tty --volume ${PWD}/phpinfo/src/:/phpinfo/src/ library/alpine:test-dockerfile-volumes ${CMD}
+VOLUME=phpinfo/src
+sudo docker run --detach --entrypoint ${ENTRYPOINT} --name test --publish 80:8080 --tty --volume ${PWD}/${VOLUME}/:/${VOLUME}/:ro library/alpine:test-dockerfile-volumes ${CMD}
 ```
 FROM THE VM:
 ```
