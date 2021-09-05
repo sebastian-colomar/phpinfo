@@ -13,9 +13,15 @@ test -d phpinfo && rm -rf phpinfo
 git clone https://github.com/academiaonline/phpinfo
 
 ENTRYPOINT=php
-CMD=" -f phpinfo/src/index.php -S 0.0.0.0:8080 "
+IMAGE=library/alpine
+NAME=test
+PUBLISH=80:8080
+TAG=test-dockerfile-volumes
 VOLUME=phpinfo/src
-sudo docker run --detach --entrypoint ${ENTRYPOINT} --name test --publish 80:8080 --tty --volume ${PWD}/${VOLUME}/:/${VOLUME}/:ro library/alpine:test-dockerfile-volumes ${CMD}
+WORKDIR=/tmp
+
+CMD=" -f ${VOLUME}/index.php -S 0.0.0.0:8080 "
+sudo docker run --detach --entrypoint ${ENTRYPOINT} --name ${NAME} --publish ${PUBLISH} --volume ${PWD}/${VOLUME}/:${WORKDIR}/${VOLUME}/:ro --workdir ${WORKDIR} ${IMAGE}:${TAG} ${CMD}
 ```
 FROM THE VM:
 ```
