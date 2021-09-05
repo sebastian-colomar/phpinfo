@@ -26,3 +26,12 @@ FROM THE VM:
 ```
 sudo docker exec test curl localhost:8080/phpinfo/src/index.php
 ```
+FROM THE VM OPEN AN INTERACTIVE TERMINAL INSIDE THE CONTAINER:
+```
+sudo docker exec --interactive --tty test sh
+```
+FROM INSIDE THE CONTAINER:
+```
+curl localhost:8080/phpinfo/src/index.php
+links http://localhost:8080/phpinfo/src/index.php
+```
