@@ -12,7 +12,7 @@ CMD ["-f","phpinfo/src/index.php","-S","0.0.0.0:8080"]
 ```
 CREATE THE CONTAINER IMAGE FROM THE Dockerfile:
 ```
-sudo docker build --file Dockerfile --tag library/alpine:test-dockerfile /tmp
+sudo docker build --file Dockerfile --tag library/alpine:test-dockerfile /mnt/
 ```
 CREATE THE CONTAINER FROM THAT IMAGE:
 ```
