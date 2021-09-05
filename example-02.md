@@ -18,3 +18,7 @@ CREATE THE CONTAINER FROM THAT IMAGE:
 ```
 sudo docker run --detach --name test --publish 80:8080 --tty library/alpine:test-dockerfile
 ```
+FROM THE VM:
+```
+curl localhost:80/phpinfo/src/index.php
+```
