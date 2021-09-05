@@ -16,7 +16,7 @@ sudo docker build --file Dockerfile --tag library/alpine:test-dockerfile /mnt/
 ```
 CREATE THE CONTAINER FROM THAT IMAGE:
 ```
-sudo docker run --detach --name test --publish 80:8080 --tty library/alpine:test-dockerfile
+sudo docker run --detach --entrypoint ${ENTRYPOINT} --name test --publish 80:8080 --tty library/alpine:test-dockerfile ${CMD}
 ```
 FROM THE VM:
 ```
