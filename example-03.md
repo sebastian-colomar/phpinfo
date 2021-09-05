@@ -1,11 +1,11 @@
-CREATE A FILE CALLED Dockerfile with the following content:
+CREATE A FILE CALLED Dockerfile-volumes with the following content:
 ```
 FROM    library/alpine:latest
 RUN     apk add php
 ```
-CREATE THE CONTAINER IMAGE FROM THE Dockerfile:
+CREATE THE CONTAINER IMAGE FROM THE Dockerfile-volumes:
 ```
-sudo docker build --file Dockerfile --tag library/alpine:test-dockerfile-volumes /mnt/
+sudo docker build --file Dockerfile-volumes --tag library/alpine:test-dockerfile-volumes /mnt/
 ```
 CREATE THE CONTAINER FROM THAT IMAGE:
 ```
