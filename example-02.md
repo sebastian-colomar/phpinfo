@@ -22,3 +22,7 @@ FROM THE VM:
 ```
 curl localhost:80/phpinfo/src/index.php
 ```
+FROM THE VM:
+```
+sudo docker exec test curl localhost:8080/phpinfo/src/index.php
+```
