@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: phpinfo-po
+spec:
+  containers:
+    -
+      args:
+      command:
+      env:
+      image:
+      name:
+      ports:
+      resources:
+      volumeMounts:
+      workingDir:
+  initContainers:
+    -
+      args:
+        - git clone https://github.com/ganimedes-colomar/phpinfo ;
+        - cd phpinfo ;
+        - git checkout 2021-09-santander ;
+        - cp -r src/index.php /public/ ;
+      command:
+        - /bin/sh
+        - -c
+      env:
+        -
+          name: author
+          value: Ganimedes
+      image: alpine/git:1.0.30@sha256:0595334722a2d486ed7c1a10a9138180f052343d5569942ecceb88d6e7fd1c0f
+      name: phpinfo-git
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100M
+        requests:
+          cpu: 100m
+          memory: 100M
+      volumeMounts:
+        -
+          mountPath: /private/
+          name: private
+          readOnly: false
+        -
+          mountPath: /public/
+          name: public
+          readOnly: false
+      workingDir: /private/
+  volumes:
+status: {}
