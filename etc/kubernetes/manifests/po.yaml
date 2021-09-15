@@ -6,18 +6,39 @@ spec:
   containers:
     -
       args:
+        - -f
+        - index.php
+        - -S
+        - 0.0.0.0:80
       command:
+        - /usr/bin/php
       env:
-      image:
-      name:
+        -
+          name: author
+          value: Rojas
+      image: fernandorojascuesta/phpinfo:latest
+      name: phpinfo-container
       ports:
+        -
+          containerPort: 8080
+          protocol: TCP
       resources:
+        limits:
+          cpu: 100m
+          memory: 100M
+        requests:
+          cpu: 100m
+          memory: 100M
       volumeMounts:
-      workingDir:
+        -
+          mountPath: /app/
+          name: public
+          readOnly: true
+      workingDir: /app/
   initContainers:
     -
       args:
-        - git clone https://github.com/ganimedes-colomar/phpinfo ;
+        - git clone https://github.com/frojascu/phpinfo ;
         - cd phpinfo ;
         - git checkout 2021-09-santander ;
         - cp -r src/index.php /public/ ;
@@ -27,7 +48,7 @@ spec:
       env:
         -
           name: author
-          value: Ganimedes
+          value: Rojas
       image: alpine/git:1.0.30@sha256:0595334722a2d486ed7c1a10a9138180f052343d5569942ecceb88d6e7fd1c0f
       name: phpinfo-git
       resources:
@@ -48,4 +69,14 @@ spec:
           readOnly: false
       workingDir: /private/
   volumes:
+    -
+      emptyDir:
+        medium: Memory
+        sizeLimit: 1M
+      name: private
+    -
+      emptyDir:
+        medium: Memory
+        sizeLimit: 1M
+      name: public
 status: {}
