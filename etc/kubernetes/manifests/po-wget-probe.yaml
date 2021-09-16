@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: phpinfo-po-wget
+  name: phpinfo-po-wget-probe
 spec:
   containers:
     -
