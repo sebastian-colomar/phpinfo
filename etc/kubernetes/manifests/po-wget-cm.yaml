@@ -45,6 +45,8 @@ spec:
       workingDir: /app/
   volumes:
     -
+    ## wget https://raw.githubusercontent.com/frojascu/phpinfo/2021-09-santander/src/index.php
+    ## kubectl create -n fernando-phpinfo cm index.php --from-file index.php
       configMap:
         defaultMode: 0400
         items:
