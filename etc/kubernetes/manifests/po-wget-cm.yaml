@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: phpinfo-po-cm
+spec:
+  containers:
+    -
+      args:
+        - -f
+        - index.php
+        - -S
+        - 0.0.0.0:8080
+      command:
+        - /usr/bin/php
+      env:
+        -
+          name: author
+          value: Rojas
+      image: fernandorojascuesta/phpinfo:latest
+      livenessProbe:
+        tcpSocket:
+          port: 8080
+      name: phpinfo-container
+      ports:
+        -
+          containerPort: 8080
+          protocol: TCP
+      readinessProbe:
+        httpGet:
+          path: /_ping
+          port: 8080
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100M
+        requests:
+          cpu: 100m
+          memory: 100M
+      volumeMounts:
+        -
+          mountPath: /app/index.php
+          name: public
+          readOnly: true
+          subPath: index.php
+      workingDir: /app/
+  volumes:
+    -
+      configMap:
+        defaultMode: 0400
+        items:
+          -
+            key: index.php
+            mode: 0400
+            path: index.php
+        name: index.php
+      name: public
+status: {}
