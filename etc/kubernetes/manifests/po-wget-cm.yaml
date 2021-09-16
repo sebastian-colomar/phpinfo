@@ -27,7 +27,7 @@ spec:
           protocol: TCP
       readinessProbe:
         httpGet:
-          path: /_ping
+          path: /index.php
           port: 8080
       resources:
         limits:
