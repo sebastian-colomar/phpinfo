@@ -1,0 +1,55 @@
+kind: ReplicaSet
+apiVersion: apps/v1
+metadata:
+  name: rs-cm-1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: phpinfo-po-cm
+      resource: rs
+      version: '1'
+  template:
+    metadata:
+      labels:
+        name: phpinfo-po-cm
+        resource: rs
+        version: '1'
+    spec:
+      volumes:
+        - name: public
+          configMap:
+            name: index.php
+            items:
+              - key: index.php
+                path: index.php
+                mode: 400
+            defaultMode: 400
+      containers:
+        - resources:
+            limits:
+              cpu: 100m
+              memory: 100M
+            requests:
+              cpu: 100m
+              memory: 100M
+          name: phpinfo-container
+          command:
+            - /usr/bin/php
+          env:
+            - name: author
+              value: NEW
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: public
+              readOnly: true
+              mountPath: /app/
+          image: 'fernandorojascuesta/phpinfo:latest'
+          workingDir: /app/
+          args:
+            - '-f'
+            - index.php
+            - '-S'
+            - '0.0.0.0:8080'
