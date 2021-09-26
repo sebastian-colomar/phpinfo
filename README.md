@@ -6,7 +6,7 @@ cd phpinfo
 git checkout main
 ```
 ```
-php -f src/index.php -S 0.0.0.0:8080
+php -f src/index.php -S 0.0.0.0:8080/src/index.php
 ```
 ```
 curl localhost:8080/src.index.php
