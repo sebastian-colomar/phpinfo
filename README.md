@@ -26,9 +26,9 @@ git pull
 docker build -f Dockerfile -t phpinfo:test .
 ```
 ```
-docker run -d --entrypoint php --name phpinfo -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:test -f index.php -S 0.0.0.0:8080
+docker run -d --entrypoint php --name phpinfo -p 8080 -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:test -f index.php -S 0.0.0.0:8080
 ```
 ```
-curl localhost:8080/src/index.php
+curl localhost:XXXX/src/index.php
 ```
 
