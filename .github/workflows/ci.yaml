@@ -17,11 +17,11 @@ jobs:                                                                          #
       run: |                                                                   #
         set -x                                                                 ;
                                                                                #
-        php -f src/index.php -S 0.0.0.0:80
+        php -f src/index.php -S 0.0.0.0:8080
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            curl localhost                                                     \
+            curl localhost:8080                                                     \
             |                                                                  \
             grep "PHP.*phpinfo()"                                              \
             &&                                                                 \
