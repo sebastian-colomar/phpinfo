@@ -12,7 +12,7 @@ php -f src/index.php -S 0.0.0.0:8080
 curl localhost:8080/src/index.php
 ```
 
-# RUN phpinfo WITH CONTAINERS
+# RUN phpinfo WITH CONTAINERIZATION (docker run)
 
 ```
 git clone https://github.com/academiaonline-org/phpinfo
@@ -32,7 +32,7 @@ docker run -d --entrypoint php --name phpinfo -p 8080 -v $PWD/src/index.php:/src
 curl localhost:XXXX/index.php
 ```
 
-# RUN phpinfo WITH STACK
+# RUN phpinfo WITH CONTAINERIZATION (docker stack)
 
 ```
 git clone https://github.com/academiaonline-org/phpinfo
