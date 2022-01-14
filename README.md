@@ -1,5 +1,7 @@
 # phpinfo
 
+[![CI](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml)
+
 ```
 git clone https://github.com/academiaonline-org/phpinfo
 cd phpinfo
