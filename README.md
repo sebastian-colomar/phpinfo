@@ -1,3 +1,5 @@
+[![CI](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml/badge.svg?branch=2022-01)](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml)
+
 # RUN phpinfo WITHOUT CONTAINERIZATION
 
 ```
