@@ -14,11 +14,11 @@ jobs:                                                                          #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
     - name: build                                                              #
-      run: docker build -t phpinfo:test .                                      ;
+      run: docker build -t phpinfo:2022-01 .                                   ;
     - name: run                                                                #
       run:                                                                     >
         docker run -d --entrypoint php --name phpinfo -p 80:8080               \
-          -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:test        \
+          -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:2022-01     \
           -f index.php -S 0.0.0.0:8080                                         ;
     - name: test                                                               #
       run:                                                                     |
@@ -40,39 +40,20 @@ jobs:                                                                          #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
+    - name: build                                                              #
+      run: docker build -t phpinfo:2022-01 .                                   ;
+    - name: init                                                               #
+      run: docker swarm init                                                   ;
+    - name: role                                                               #
+      run: sed -i /node.role/s/worker/manager/ docker-compose.yaml             ;
+    - name: deploy                                                             #
+      run: docker stack deploy -c docker-compose.yaml phpinfo                  ;
     - name: test                                                               #
-      run: |                                                                   #
-        set -x                                                                 ;
-                                                                               #
-        branch=$(basename $GITHUB_REF)                                         ;
-        project=$(basename $GITHUB_REPOSITORY)                                 ;
-                                                                               #
-        echo $branch | grep ^v[0-9]                                            \
-          && release=$( echo $branch | awk -F^v '{ print $2 }' )               \
-          || release=latest                                                    ;
-                                                                               #
-        compose=etc/$mode/manifests/$project.yaml                              ;
-        sed -i /image:.*$project/s/$release/$release-testing/ $compose         ;
-                                                                               #
-        docker build -t $GITHUB_REPOSITORY:$release-testing --no-cache .       ;
-                                                                               #
-        docker swarm init                                                      ;
-        sed -i /node.role/s/worker/manager/ $compose                           ;
-        docker stack deploy -c $compose $project                               ;
-                                                                               #
+      run:                                                                     |
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            docker service ls                                                  \
-            |                                                                  \
-            grep "$project.*replicated.*\([0-9]\)/\1.*8080"                    \
-            &&                                                                 \
-            break                                                              ;
-          done                                                                 ;
-        while true                                                             ;
-          do                                                                   \
-            sleep 10                                                           ;
-            docker service logs ${project}_${project}                          \
+            docker service logs phpinfo_phpinfo                                \
             |                                                                  \
             grep "PHP .* Development Server started"                           \
             &&                                                                 \
