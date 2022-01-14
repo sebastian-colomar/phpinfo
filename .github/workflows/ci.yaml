@@ -67,23 +67,13 @@ jobs:                                                                          #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
-    - name: test                                                               #
+    - name: build                                                              #
+      run: docker build -t phpinfo:2022-01 .                                   ;
+    - name: init                                                               #
       run: |                                                                   #
         set -x                                                                 ;
                                                                                #
-        branch=$(basename $GITHUB_REF)                                         ;
-        project=$(basename $GITHUB_REPOSITORY)                                 ;
-                                                                               #
-        echo $branch | grep ^v[0-9]                                            \
-          && release=$( echo $branch | awk -F^v '{ print $2 }' )               \
-          || release=latest                                                    ;
-                                                                               #
-        compose=etc/$mode/manifests/$project.yaml                              ;
-        sed -i /image:.*$project/s/$release/$release-testing/ $compose         ;
-                                                                               #
-        docker build -t $GITHUB_REPOSITORY:$release-testing --no-cache .       ;
-                                                                               #
-        uuid=$( md5sum $compose | cut -d\  -f1 )                               ;
+        uuid=$( md5sum kube-compose.yaml | cut -d\  -f1 )                      ;
         git clone --single-branch -b v1.2                                      \
           https://github.com/academiaonline/kubernetes $uuid                   ;
         path=$uuid/bin/cluster/ubuntu18/install-docker-kubelet.sh              ;
@@ -94,25 +84,22 @@ jobs:                                                                          #
         kubectl taint node $master node-role.kubernetes.io/master:NoSchedule-  ;
         rm -rf $uuid                                                           ;
                                                                                #
-        sed -i /imagePullPolicy/s/Always/Never/ $compose                       ;
-        kubectl apply -f $compose                                              ;
+    - name: apply                                                              #
+      run: |                                                                   #
+        set -x                                                                 ;
                                                                                #
-        while true                                                             ;
-          do                                                                   \
-            sleep 10                                                           ;
-            kubectl get deploy | grep "$project.*\([0-9]\)/\1" && break        ;
-          done                                                                 ;
-        while true                                                             ;
-          do                                                                   \
-            sleep 10                                                           ;
-            kubectl get svc | grep "$project.*ClusterIP.*8080/TCP" && break    ;
-          done                                                                 ;
+        kubectl apply -f kube-compose.yaml                                     ;
+                                                                               #
+    - name: test                                                               #
+      run: |                                                                   #
+        set -x                                                                 ;
+                                                                               #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
             kubectl logs deploy/$project                                       \
             |                                                                  \
-            grep "PHP .* Development Server started"                           \
+            grep "PHP .* Development Server .* started"                        \
             &&                                                                 \
             break                                                              ;
           done                                                                 ;
