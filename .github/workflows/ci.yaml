@@ -13,16 +13,16 @@ jobs:                                                                          #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
-    - name: test                                                               #
-      run: |                                                                   #
-        set -x                                                                 ;
-                                                                               #
-        docker build -t phpinfo:test .                                         ;
-                                                                               #
+    - name: build                                                              #
+      run: docker build -t phpinfo:test .                                      ;
+    - name: run                                                                #
+      run:                                                                     >
         docker run -d --entrypoint php --name phpinfo -p 80:8080               \
           -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:test        \
           -f index.php -S 0.0.0.0:8080                                         ;
-                                                                               #
+    - name: test                                                               #
+      run:                                                                     |
+        set -x                                                                 ;
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
