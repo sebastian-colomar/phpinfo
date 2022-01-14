@@ -1,0 +1,138 @@
+################################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza             #
+#      SPDX-License-Identifier:  GPL-2.0-only                                  #
+################################################################################
+name: CI                                                                       #
+on:                                                                            #
+  push:                                                                        #
+    branches:                                                                  #
+    - 2022-01                                                                  #
+jobs:                                                                          #
+  docker:                                                                      #
+    runs-on: ubuntu-18.04                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: test                                                               #
+      run: |                                                                   #
+        set -x                                                                 ;
+                                                                               #
+        docker build -t phpinfo:test .                                         ;
+                                                                               #
+        docker run -d --entrypoint php --name phpinfo -p 80:8080               \
+          -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:test        \
+          -f index.php -S 0.0.0.0:8080                                         ;
+                                                                               #
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            curl localhost                                                     \
+            |                                                                  \
+            grep "PHP.*phpinfo()"                                              \
+            &&                                                                 \
+            break                                                              ;
+          done                                                                 ;
+                                                                               #
+  swarm:                                                                       #
+    env:                                                                       #
+      mode: swarm                                                              #
+    runs-on: ubuntu-18.04                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: test                                                               #
+      run: |                                                                   #
+        set -x                                                                 ;
+                                                                               #
+        branch=$(basename $GITHUB_REF)                                         ;
+        project=$(basename $GITHUB_REPOSITORY)                                 ;
+                                                                               #
+        echo $branch | grep ^v[0-9]                                            \
+          && release=$( echo $branch | awk -F^v '{ print $2 }' )               \
+          || release=latest                                                    ;
+                                                                               #
+        compose=etc/$mode/manifests/$project.yaml                              ;
+        sed -i /image:.*$project/s/$release/$release-testing/ $compose         ;
+                                                                               #
+        docker build -t $GITHUB_REPOSITORY:$release-testing --no-cache .       ;
+                                                                               #
+        docker swarm init                                                      ;
+        sed -i /node.role/s/worker/manager/ $compose                           ;
+        docker stack deploy -c $compose $project                               ;
+                                                                               #
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            docker service ls                                                  \
+            |                                                                  \
+            grep "$project.*replicated.*\([0-9]\)/\1.*8080"                    \
+            &&                                                                 \
+            break                                                              ;
+          done                                                                 ;
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            docker service logs ${project}_${project}                          \
+            |                                                                  \
+            grep "PHP .* Development Server started"                           \
+            &&                                                                 \
+            break                                                              ;
+          done                                                                 ;
+                                                                               #
+  kubernetes:                                                                  #
+    env:                                                                       #
+      mode: kubernetes                                                         #
+    runs-on: ubuntu-18.04                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: test                                                               #
+      run: |                                                                   #
+        set -x                                                                 ;
+                                                                               #
+        branch=$(basename $GITHUB_REF)                                         ;
+        project=$(basename $GITHUB_REPOSITORY)                                 ;
+                                                                               #
+        echo $branch | grep ^v[0-9]                                            \
+          && release=$( echo $branch | awk -F^v '{ print $2 }' )               \
+          || release=latest                                                    ;
+                                                                               #
+        compose=etc/$mode/manifests/$project.yaml                              ;
+        sed -i /image:.*$project/s/$release/$release-testing/ $compose         ;
+                                                                               #
+        docker build -t $GITHUB_REPOSITORY:$release-testing --no-cache .       ;
+                                                                               #
+        uuid=$( md5sum $compose | cut -d\  -f1 )                               ;
+        git clone --single-branch -b v1.2                                      \
+          https://github.com/academiaonline/kubernetes $uuid                   ;
+        path=$uuid/bin/cluster/ubuntu18/install-docker-kubelet.sh              ;
+        source $path                                                           ;
+        path=$uuid/bin/cluster/ubuntu18/install-leader.sh                      ;
+        source $path                                                           ;
+        master=$( kubectl get node | grep master | awk '{ print $1 }' )        ;
+        kubectl taint node $master node-role.kubernetes.io/master:NoSchedule-  ;
+        rm -rf $uuid                                                           ;
+                                                                               #
+        sed -i /imagePullPolicy/s/Always/Never/ $compose                       ;
+        kubectl apply -f $compose                                              ;
+                                                                               #
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            kubectl get deploy | grep "$project.*\([0-9]\)/\1" && break        ;
+          done                                                                 ;
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            kubectl get svc | grep "$project.*ClusterIP.*8080/TCP" && break    ;
+          done                                                                 ;
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            kubectl logs deploy/$project                                       \
+            |                                                                  \
+            grep "PHP .* Development Server started"                           \
+            &&                                                                 \
+            break                                                              ;
+          done                                                                 ;
+################################################################################
