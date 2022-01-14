@@ -70,9 +70,8 @@ jobs:                                                                          #
     - name: build                                                              #
       run: docker build -t phpinfo:2022-01 .                                   ;
     - name: init                                                               #
-      run: |                                                                   #
+      run:                                                                     |
         set -x                                                                 ;
-                                                                               #
         uuid=$( md5sum kube-compose.yaml | cut -d\  -f1 )                      ;
         git clone --single-branch -b v1.2                                      \
           https://github.com/academiaonline/kubernetes $uuid                   ;
@@ -83,21 +82,16 @@ jobs:                                                                          #
         master=$( kubectl get node | grep master | awk '{ print $1 }' )        ;
         kubectl taint node $master node-role.kubernetes.io/master:NoSchedule-  ;
         rm -rf $uuid                                                           ;
-                                                                               #
     - name: apply                                                              #
-      run: |                                                                   #
-        set -x                                                                 ;
-                                                                               #
-        kubectl apply -f kube-compose.yaml                                     ;
-                                                                               #
+      run: kubectl apply -f kube-compose.yaml                                  ;
     - name: test                                                               #
-      run: |                                                                   #
+      run:                                                                     |
         set -x                                                                 ;
-                                                                               #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            kubectl logs deploy/$project                                       \
+            kubectl logs rc/phpinfo;
+            kubectl logs rc/phpinfo                                            \
             |                                                                  \
             grep "PHP .* Development Server .* started"                        \
             &&                                                                 \
