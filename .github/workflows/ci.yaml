@@ -54,6 +54,7 @@ jobs:                                                                          #
           do                                                                   \
             sleep 10                                                           ;
             docker service logs phpinfo_phpinfo                                \
+            2>& 1                                                              \
             |                                                                  \
             grep "PHP .* Development Server .* started"                        \
             &&                                                                 \
@@ -92,6 +93,7 @@ jobs:                                                                          #
             sleep 10                                                           ;
             kubectl logs rc/phpinfo;
             kubectl logs rc/phpinfo                                            \
+            2>& 1                                                              \
             |                                                                  \
             grep "PHP .* Development Server .* started"                        \
             &&                                                                 \
