@@ -55,7 +55,7 @@ jobs:                                                                          #
             sleep 10                                                           ;
             docker service logs phpinfo_phpinfo                                \
             |                                                                  \
-            grep "PHP .* Development Server started"                           \
+            grep "PHP .* Development Server .* started"                        \
             &&                                                                 \
             break                                                              ;
           done                                                                 ;
