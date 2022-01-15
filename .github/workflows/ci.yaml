@@ -22,15 +22,10 @@ jobs:                                                                          #
           -f index.php -S 0.0.0.0:8080                                         ;
     - name: test                                                               #
       run:                                                                     |
-        set -x                                                                 ;
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            curl localhost                                                     \
-            |                                                                  \
-            grep "PHP.*phpinfo()"                                              \
-            &&                                                                 \
-            break                                                              ;
+            curl localhost | grep "PHP.*phpinfo()" && break                    ;
           done                                                                 ;
                                                                                #
   swarm:                                                                       #
@@ -53,12 +48,7 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            docker service logs phpinfo_phpinfo                                \
-            2>& 1                                                              \
-            |                                                                  \
-            grep "PHP .* Development Server .* started"                        \
-            &&                                                                 \
-            break                                                              ;
+            docker service logs phpinfo_phpinfo 2>& 1 | grep "PHP" && break    ;
           done                                                                 ;
                                                                                #
   kubernetes:                                                                  #
