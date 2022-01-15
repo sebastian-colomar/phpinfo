@@ -46,7 +46,10 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            docker service logs phpinfo_phpinfo 2>& 1 | grep "PHP" && break    ;
+            ip=$( ip r | grep -v docker | awk '/kernel/{ print $9 }' )         ;
+            echo $ip
+            curl ${ip}:8080 | grep "PHP.*phpinfo()" && break                   ;
+            #docker service logs phpinfo_phpinfo 2>& 1 | grep "PHP" && break    ;
           done                                                                 ;
                                                                                #
   kubernetes:                                                                  #
