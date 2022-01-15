@@ -17,7 +17,6 @@ jobs:                                                                          #
       run: php -f src/index.php -S 0.0.0.0:8080                                &
     - name: test                                                               #
       run:                                                                     |
-        set -x                                                                 ;
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
