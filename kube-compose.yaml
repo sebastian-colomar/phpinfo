@@ -39,7 +39,7 @@ spec:
       volumes:
       - 
         hostPath: 
-          path: ./src/index.php
+          path: /home/runner/work/phpinfo/phpinfo/src/index.php
           type: File
         name: phpinfo-volume
 ---
