@@ -42,3 +42,17 @@ spec:
           type: Directory
         name: phpinfo-volume
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo
+spec:
+  ports:
+  - 
+    nodePort: 30000
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: phpinfo
+  type: NodePort
+---
