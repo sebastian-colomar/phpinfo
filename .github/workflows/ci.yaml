@@ -17,7 +17,7 @@ jobs:                                                                          #
       run: docker build -f Dockerfile -t phpinfo:2022-01 .                     ;
     - name: run                                                                #
       run:                                                                     >
-        docker run -d --entrypoint php --name phpinfo -p 80:8080               \
+        docker run -d --entrypoint php --name phpinfo -p 8080:8080             \
           -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:2022-01     \
           -f index.php -S 0.0.0.0:8080                                         ;
     - name: test                                                               #
@@ -25,7 +25,7 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            curl localhost | grep "PHP.*phpinfo()" && break                    ;
+            curl localhost:8080 | grep "PHP.*phpinfo()" && break               ;
           done                                                                 ;
                                                                                #
   swarm:                                                                       #
