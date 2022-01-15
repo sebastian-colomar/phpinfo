@@ -1,5 +1,2 @@
-FROM docker.io/library/alpine:latest AS multilayer
+FROM docker.io/library/alpine:latest
 RUN apk add php
-
-FROM scratch AS singlelayer
-COPY --from=multilayer / /
