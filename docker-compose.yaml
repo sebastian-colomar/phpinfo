@@ -9,7 +9,7 @@ services:
     entrypoint: php
     image: phpinfo:2022-01
     ports:
-      - "8080"
+      - "8080:8080"
     volumes:
       - ./src/index.php:/src/index.php:ro
     working_dir: /src/
