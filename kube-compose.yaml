@@ -19,6 +19,7 @@ spec:
       containers:
       - name: phpinfo-container
         image: phpinfo:2022-01
+        imagePullPolicy: Never
         ports:
         - containerPort: 8080
 ---
