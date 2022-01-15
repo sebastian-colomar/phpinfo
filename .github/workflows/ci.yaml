@@ -80,7 +80,7 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            ip=$( ip r | grep -v docker | awk '/kernel/{ print $9 }' )         ;
+            ip=$( ip r | grep -v docker | grep kern -m1 | awk '{ print $9 }' ) ;
             curl ${ip}:30000 | grep "PHP.*phpinfo()" && break                  ;
             kubectl logs rc/phpinfo-rc 2>& 1 | grep "PHP" && break             ;
           done                                                                 ;
