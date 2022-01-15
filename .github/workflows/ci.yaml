@@ -34,7 +34,7 @@ jobs:                                                                          #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
     - name: build                                                              #
-      run: docker build -t phpinfo:2022-01 .                                   ;
+      run: docker build -f Dockerfile -t phpinfo:2022-01 .                     ;
     - name: init                                                               #
       run: docker swarm init                                                   ;
     - name: role                                                               #
