@@ -31,15 +31,14 @@ spec:
         - containerPort: 8080
         volumeMounts:
         - 
-          mountPath: /src/index.php
+          mountPath: /src/
           name: phpinfo-volume
           readOnly: true
-          subPath: index.php
         workingDir: /src/
       volumes:
       - 
         hostPath: 
-          path: /home/runner/work/phpinfo/phpinfo/src/index.php
-          type: File
+          path: /home/runner/work/phpinfo/phpinfo/src/
+          type: Directory
         name: phpinfo-volume
 ---
