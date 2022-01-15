@@ -17,7 +17,7 @@ jobs:                                                                          #
       run: docker build -f Dockerfile -t phpinfo:2022-01 .                     ;
     - name: run                                                                #
       run:                                                                     >
-        docker run -d --entrypoint php --name phpinfo -p 8080:8080             \
+        docker run -d --entrypoint php --name phpinfo -p 30000:8080            \
           -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:2022-01     \
           -f index.php -S 0.0.0.0:8080                                         ;
     - name: test                                                               #
@@ -26,7 +26,7 @@ jobs:                                                                          #
           do                                                                   \
             sleep 10                                                           ;
             ip=$( ip r | grep -v docker | awk '/kernel/{ print $9 }' )         ;
-            curl ${ip}:8080 | grep "PHP.*phpinfo()" && break                   ;
+            curl ${ip}:30000 | grep "PHP.*phpinfo()" && break                  ;
           done                                                                 ;
                                                                                #
   swarm:                                                                       #
@@ -48,7 +48,7 @@ jobs:                                                                          #
           do                                                                   \
             sleep 10                                                           ;
             ip=$( ip r | grep -v docker | awk '/kernel/{ print $9 }' )         ;
-            curl ${ip}:8080 | grep "PHP.*phpinfo()" && break                   ;
+            curl ${ip}:30000 | grep "PHP.*phpinfo()" && break                  ;
           done                                                                 ;
                                                                                #
   kubernetes:                                                                  #
@@ -81,7 +81,7 @@ jobs:                                                                          #
           do                                                                   \
             sleep 10                                                           ;
             ip=$( ip r | grep -v docker | awk '/kernel/{ print $9 }' )         ;
-            curl ${ip}:8080 | grep "PHP.*phpinfo()" && break                   ;
+            curl ${ip}:30000 | grep "PHP.*phpinfo()" && break                  ;
             kubectl logs rc/phpinfo-rc 2>& 1 | grep "PHP" && break             ;
           done                                                                 ;
 ################################################################################
