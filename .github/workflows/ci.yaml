@@ -21,10 +21,6 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            curl localhost:8080/src/index.php                                  \
-            |                                                                  \
-            grep "PHP.*phpinfo()"                                              \
-            &&                                                                 \
-            break                                                              ;
+            curl localhost:8080/src/index.php | grep "PHP.*phpinfo()" && break ;
           done                                                                 ;
 ################################################################################
