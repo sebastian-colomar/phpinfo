@@ -80,6 +80,11 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            kubectl logs rc/phpinfo-rc 2>& 1 | grep "PHP" && break             ;
+            pwd
+            ls
+            kubectl get po
+            kubectl describe po
+            sleep 100
+            #kubectl logs rc/phpinfo-rc 2>& 1 | grep "PHP" && break             ;
           done                                                                 ;
 ################################################################################
