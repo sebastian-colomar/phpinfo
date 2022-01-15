@@ -29,8 +29,6 @@ jobs:                                                                          #
           done                                                                 ;
                                                                                #
   swarm:                                                                       #
-    env:                                                                       #
-      mode: swarm                                                              #
     runs-on: ubuntu-18.04                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
