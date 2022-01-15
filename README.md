@@ -28,10 +28,10 @@ git pull
 docker build -f Dockerfile -t phpinfo:2022-01 .
 ```
 ```
-docker run -d --entrypoint php --name phpinfo -p 8080:8080 -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:2022-01 -f index.php -S 0.0.0.0:8080
+docker run -d --entrypoint php --name phpinfo -p 8080 -v $PWD/src/index.php:/src/index.php:ro -w /src/ phpinfo:2022-01 -f index.php -S 0.0.0.0:8080
 ```
 ```
-curl localhost:8080/index.php
+curl localhost:XXXX/index.php
 ```
 
 # RUN phpinfo WITH CONTAINERIZATION (docker stack)
@@ -51,6 +51,6 @@ docker build -f Dockerfile -t phpinfo:2022-01 .
 docker stack deploy -c docker-compose.yaml phpinfo
 ```
 ```
-curl localhost:8080/index.php
+curl localhost:XXXX/index.php
 ```
 
