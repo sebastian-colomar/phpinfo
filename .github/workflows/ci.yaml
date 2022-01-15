@@ -91,7 +91,9 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            kubectl logs rc/phpinfo-rc;
+            kubectl get all
+            kubectl describe po
+            kubectl logs rc/phpinfo-rc
             kubectl logs rc/phpinfo-rc                                         \
             2>& 1                                                              \
             |                                                                  \
