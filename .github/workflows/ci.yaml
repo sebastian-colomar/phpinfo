@@ -25,7 +25,8 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            curl localhost:8080 | grep "PHP.*phpinfo()" && break               ;
+            ip=$( ip r | grep -v docker | awk '/kernel/{ print $9 }' )         ;
+            curl ${ip}:8080 | grep "PHP.*phpinfo()" && break                   ;
           done                                                                 ;
                                                                                #
   swarm:                                                                       #
@@ -79,6 +80,8 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
+            ip=$( ip r | grep -v docker | awk '/kernel/{ print $9 }' )         ;
+            curl ${ip}:8080 | grep "PHP.*phpinfo()" && break                   ;
             kubectl logs rc/phpinfo-rc 2>& 1 | grep "PHP" && break             ;
           done                                                                 ;
 ################################################################################
