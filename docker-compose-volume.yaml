@@ -11,6 +11,7 @@ services:
         mode: 0400
         source: ${PWD}/src/index.php
         target: /src/index.php
+        type: bind
         uid: '65534'
         gid: '65534'
     entrypoint: php
