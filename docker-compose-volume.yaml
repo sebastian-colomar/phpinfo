@@ -12,8 +12,6 @@ services:
         source: ${PWD}/src/index.php
         target: /src/index.php
         type: bind
-        uid: '65534'
-        gid: '65534'
     entrypoint: php
     image: docker.io/library/php:alpine
     ports:
