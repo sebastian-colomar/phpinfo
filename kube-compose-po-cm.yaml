@@ -14,9 +14,9 @@ data:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: phpinfo-po
+  name: phpinfo-po-cm
   labels:
-    app: phpinfo-po
+    app: phpinfo-po-cm
 spec:
   containers:
     - name: phpinfo-container
@@ -56,6 +56,6 @@ spec:
     - port: 80
       targetPort: 8080
   selector:
-    app: phpinfo-po
+    app: phpinfo-po-cm
   type: NodePort
 ---
