@@ -51,7 +51,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: phpinfo
+  name: phpinfo-po-git
 spec:
   ports:
     - port: 80
