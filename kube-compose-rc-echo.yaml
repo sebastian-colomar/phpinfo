@@ -12,7 +12,7 @@ spec:
   replicas: 2
   selector:
     app: phpinfo-rc-echo
-  templates:
+  template:
   # HERE COMES THE MANIFEST OF THE POD
     metadata:
       # BUT WE REMOVE THE ORIGINAL NAME OF THE POD
