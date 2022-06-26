@@ -1,0 +1,72 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+# docker service create --detach --entrypoint php --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/src/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine -f index.php -S 0.0.0.0:8080
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: phpinfo-rs-echo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: phpinfo-rs-echo
+  template:
+  # HERE COMES THE MANIFEST OF THE POD
+    metadata:
+      # BUT WE REMOVE THE ORIGINAL NAME OF THE POD
+      #name: phpinfo-rc-echo
+      labels:
+        app: phpinfo-rs-echo
+    spec:
+      containers:
+        - name: phpinfo-container
+          args:
+            - -f
+            - index.php
+            - -S
+            - 0.0.0.0:8080
+          command:
+            - php
+          image: docker.io/library/php:alpine
+          securityContext:
+            runAsGroup: 65534
+            runAsUser: 65534
+          volumeMounts:
+            - name: phpinfo-volume
+              mountPath: /src/
+              readOnly: true
+          workingDir: /src/
+      initContainers:
+        - name: phpinfo-init-container
+          args:
+            - echo '<?php phpinfo();?>' 1> index.php
+          command:
+            - sh
+            - -c
+          image: docker.io/library/busybox:latest
+          volumeMounts:
+            - name: phpinfo-volume
+              mountPath: /src/
+              readOnly: false
+          workingDir: /src/
+      volumes:
+        - name: phpinfo-volume
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo-rs-echo
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: phpinfo-rs-echo
+  type: NodePort
+---
