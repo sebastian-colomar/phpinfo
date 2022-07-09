@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: phpinfo-po-echo-static
+  labels:
+    app: phpinfo-po-echo-static
+spec:
+  containers:
+    - name: phpinfo-container
+      args:
+        - -f
+        - index.php
+        - -S
+        - 0.0.0.0:8080
+      command:
+        - php
+      image: docker.io/library/php:alpine
+      securityContext:
+        runAsGroup: 65534
+        runAsUser: 65534
+      volumeMounts:
+        - name: phpinfo-volume
+          mountPath: /src/
+          readOnly: true
+      workingDir: /src/
+  initContainers:
+    - name: phpinfo-init-container
+      args:
+        - echo '<?php phpinfo();?>' 1> index.php
+      command:
+        - sh
+        - -c
+      image: docker.io/library/busybox:latest
+      volumeMounts:
+        - name: phpinfo-volume
+          mountPath: /src/
+          readOnly: false
+      workingDir: /src/
+  volumes:
+    - name: phpinfo-volume
+      emptyDir:
+        medium: Memory
+        sizeLimit: 1Mi
