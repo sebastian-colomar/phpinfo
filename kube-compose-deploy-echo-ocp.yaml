@@ -65,5 +65,5 @@ spec:
       targetPort: 8080
   selector:
     app: phpinfo-deploy-echo
-  type: NodePort
+  type: ClusterIP
 ---
