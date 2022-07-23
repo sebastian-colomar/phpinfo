@@ -57,3 +57,16 @@ spec:
           emptyDir:
             medium: Memory
             sizeLimit: 1Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo-deploy-echo
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: phpinfo-deploy-echo-blue
+  type: NodePort
+---
