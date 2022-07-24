@@ -56,6 +56,10 @@ spec:
         - effect: NoSchedule
           key: node.kubernetes.io/unschedulable
           operator: Exists
+        - effect: NoExecute
+          key: my-taints.sebastian-colomar.com/my-example
+          operator: Equal
+          value: my-value
       volumes:
         - name: phpinfo-volume
           emptyDir:
