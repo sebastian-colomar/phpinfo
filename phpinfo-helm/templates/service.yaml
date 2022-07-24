@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "phpinfo-helm.fullname" . }}
+  labels:
+    {{- include "phpinfo-helm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      #targetPort: 8080
+      targetPort: {{ .Values.service.targetPort }}
+      #protocol: TCP
+      protocol: {{ .Values.service.protocol }}
+  selector:
+    {{- include "phpinfo-helm.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "phpinfo-helm.fullname" . }}
+  labels:
+    {{- include "phpinfo-helm.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "phpinfo-helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "phpinfo-helm.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "phpinfo-helm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          command:
+            - php
+          args:
+            - -f
+            - index.php
+            - -S
+            - 0.0.0.0:8080
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - 
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /index.php
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /index.php
+              port: 8080
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: phpinfo-volume
+              mountPath: /src/
+              readOnly: true
+          workingDir: /src/
+      initContainers:
+        - name: phpinfo-init-container
+          args:
+            - echo '<?php phpinfo();?>' 1> index.php
+          command:
+            - sh
+            - -c
+          image: docker.io/library/busybox:latest
+          volumeMounts:
+            - name: phpinfo-volume
+              mountPath: /src/
+              readOnly: false
+          workingDir: /src/
+      volumes:
+        - name: phpinfo-volume
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
