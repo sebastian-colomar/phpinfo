@@ -31,7 +31,7 @@ Or you can test the application from outside the container with the following co
 curl localhost:$( docker port phpinfo | cut -d: -f2 )/index.php -Is
 ```
 
-## The cluster
+## The orchestrator
 Though the previous method is perfectly appropriate in order to run our application it will not provide high availability.
 If the node is down then our application will also be down.
 In order to avoid that situation we need a cluster of several nodes so that when one node is down then the other node will take the workload of the affected node.
