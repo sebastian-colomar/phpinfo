@@ -92,6 +92,20 @@ services:
       - 8080
     user: nobody:nobody
     working_dir: /src/
-version: "3"
+version: "3.8"
 EOF
+```
+Then you will deploy your highly available application with the following command:
+```
+docker stack deploy -c docker-compose.yaml phpinfo
+```
+You can see the result of the deployment with the following commands:
+```
+docker stack ls
+docker stack ps phpinfo
+docker stack services phpinfo
+```
+You can connect to the web server with the following command:
+```
+curl localhost:$( docker stack services phpinfo | awk /phpinfo_phpinfo/'{ print $6 }' | cut -d: -f2 | cut -d- -f1 )/index.php -Is
 ```
