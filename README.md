@@ -18,7 +18,7 @@ curl localhost:8080/index.php -Is
 ```
 
 ## The container
-In order to containerize the application we can simply apply the following command:
+In order to containerize the application we can simply run the following command:
 ```
 docker run --detach --entrypoint php --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine -f index.php -S 0.0.0.0:8080
 ```
