@@ -22,3 +22,11 @@ In order to containerize the application we can simply run the following command
 ```
 docker run --detach --entrypoint php --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine -f index.php -S 0.0.0.0:8080
 ```
+You can test the application from inside the container running the following command:
+```
+docker exec phpinfo curl localhost:8080/index.php -Is
+```
+Or you can test the application from outside the container with the following command:
+```
+curl localhost:$( docker port phpinfo | cut -d: -f2 )/index.php -Is
+```
