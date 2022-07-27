@@ -30,3 +30,39 @@ Or you can test the application from outside the container with the following co
 ```
 curl localhost:$( docker port phpinfo | cut -d: -f2 )/index.php -Is
 ```
+
+## The cluster
+Though the previous method is perfectly appropriate in order to run our application it will not provide high availability.
+If the node is down then our application will also be down.
+In order to avoid that situation we need a cluster of several nodes so that when one node is down then the other node will take the workload of the affected node.
+We can easily create a cluster in this Lab environment:
+- https://labs.play-with-docker.com
+
+You will first need to create a free Docker account in order to login to the Docker Playground:
+- https://docker.com
+
+Once you have logged in you will need to create at least two instances clicking in the "ADD NEW INSTANCE" to the left menu of the page.
+Next step is to initialize the cluster running the following command on the first instance:
+```
+docker swarm init --advertise-addr $( hostname -i )
+```
+This last command will initialize a Docker Swarm cluster on the first instance which will act as a master node.
+This will be the output of the previous command:
+```
+Swarm initialized: current node (xxx) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token xxx-xxx-xxx-xxx x.x.x.x:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+```
+In order to add a worker node to this cluster we need to copy the `docker swarm join` full command and execute in the second instance.
+This will be the output of the previous command on the second instance:
+```
+This node joined a swarm as a worker.
+```
+Now we can run the following command on the first instance in order to check the cluster availability:
+```
+docker node ls
+```
