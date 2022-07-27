@@ -66,3 +66,32 @@ Now we can run the following command on the first instance in order to check the
 ```
 docker node ls
 ```
+If you want to deploy the application in this highly available cluster you will need to first create a compose file:
+```
+tee docker-compose.yaml 0<<EOF
+configs:
+  config-file:
+    file: ${PWD}/index.php
+services:
+  phpinfo:
+    command:
+      - -f
+      - index.php
+      - -S
+      - 0.0.0.0:8080
+    configs:
+      - 
+        mode: 0400
+        source: config-file
+        target: /src/index.php
+        uid: '65534'
+        gid: '65534'
+    entrypoint: php
+    image: docker.io/library/php:alpine
+    ports:
+      - 8080
+    user: nobody:nobody
+    working_dir: /src/
+version: "3"
+EOF
+```
