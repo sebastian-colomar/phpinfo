@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-deploy-alpine
+spec:
+  selector:
+    matchLabels:
+      app: phpinfo-deploy-alpine
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: phpinfo-deploy-alpine
+    spec:
+      containers:
+        - name: phpinfo
+          image: 'index.docker.io/library/php:alpine'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100M
+            requests:
+              cpu: 100m
+              memory: 100M
+          env:
+            - name: AUTHOR
+              value: Sebastian
+          securityContext:
+              readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /data/index.php
+              subPath: index.php
+              name: phpinfo-volume
+              readOnly: true
+          workingDir: /data/
+          args:
+            - php
+            - -f
+            - index.php
+            - -S
+            - 0.0.0.0:8080
+      restartPolicy: Always
+      volumes:
+        - name: phpinfo-volume
+          configMap:
+              defaultMode: 0400
+              items:
+                - key: index.php
+                  path: index.php
+                  mode: 0400
+              name: phpinfo-cm
