@@ -38,10 +38,6 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            docker top test
-            docker logs test
-            docker stats test --no-stream
-            docker inspect test
             docker exec test wget -q -O - localhost:9000/index.php | grep "PHP.*phpinfo()" && break ;
           done                                                                 ;
 ################################################################################
