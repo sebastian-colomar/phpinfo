@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: phpinfo-cm
+data:
+  index.php: |-
+    <?php
+    // Show all information, defaults to INFO_ALL
+    phpinfo();
+    // Show just the module information.
+    // phpinfo(8) yields identical results.
+    phpinfo(INFO_MODULES);
+    ?>
