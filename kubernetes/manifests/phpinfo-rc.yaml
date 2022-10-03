@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: phpinfo-rc
+  name: phpinfo-rc-alpine
 spec:
   replicas: 2
   selector:
-    app: phpinfo-rc
+    app: phpinfo-rc-alpine
   template:
     metadata:
       labels:
-        app: phpinfo-rc
+        app: phpinfo-rc-alpine
     spec:
       containers:
         - name: phpinfo
-          image: 'index.docker.io/library/php:alpine@sha256:ab23b416d86aec450ee7b75727f6bbec272edc2764a1b6fad13bc2823c59bb6b'
+          image: 'index.docker.io/library/php:alpine'
           ports:
             - containerPort: 8080
               protocol: TCP
