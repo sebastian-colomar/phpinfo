@@ -42,6 +42,6 @@ jobs:                                                                          #
             docker logs test
             docker stats test --no-stream
             docker inspect test
-            docker exec test curl localhost:9000/index.php | grep "PHP.*phpinfo()" && break ;
+            docker exec test wget -q -O - localhost:9000/index.php | grep "PHP.*phpinfo()" && break ;
           done                                                                 ;
 ################################################################################
