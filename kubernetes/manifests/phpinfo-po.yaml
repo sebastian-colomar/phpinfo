@@ -1,0 +1,52 @@
+# docker run --cpus 100m --detach --env AUTHOR=Sebastian --expose 8080 --memory 100M --memory-reservation 100M --name phpinfo --read-only --restart always --user nobody:nogroup --volume ${HOME}/phpinfo/:/data/:ro --workdir /data/ index.docker.io/library/php:alpine@sha256:ab23b416d86aec450ee7b75727f6bbec272edc2764a1b6fad13bc2823c59bb6b php -f index.php -S 0.0.0.0:8080
+apiVersion: v1
+kind: Pod
+metadata:
+  name: phpinfo-po
+  labels:
+    app: phpinfo-po
+spec:
+  containers:
+    - name: phpinfo
+      image: 'index.docker.io/library/php:alpine@sha256:ab23b416d86aec450ee7b75727f6bbec272edc2764a1b6fad13bc2823c59bb6b'
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100M
+        requests:
+          cpu: 100m
+          memory: 100M
+      env:
+        - name: AUTHOR
+          value: Sebastian
+      securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 65534
+          runAsGroup: 65534
+      volumeMounts:
+        - mountPath: /data/index.php
+          subPath: index.php
+          name: phpinfo-volume
+          readOnly: true
+      workingDir: /data/
+      args:
+        - php
+        - -f
+        - index.php
+        - -S
+        - 0.0.0.0:8080
+  restartPolicy: Always
+  securityContext:
+    fsGroup: 65534
+  volumes:
+    - name: phpinfo-volume
+      configMap:
+          defaultMode: 0400
+          items:
+            - key: index.php
+              path: index.php
+              mode: 0400
+          name: phpinfo-cm
