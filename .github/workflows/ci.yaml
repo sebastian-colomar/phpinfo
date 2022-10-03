@@ -30,9 +30,9 @@ jobs:                                                                          #
     - name: docker-build                                                                #
       run:                                                                     |
         mkdir --parents build-context/
-        docker build --file docker/Dockerfile --tag localhost/library/alpine:php build-context/
+        docker build --file docker/Dockerfile --tag localhost/library/alpine:php-8.1 build-context/
     - name: docker-run
-      run: docker run --detach --name test --volume ${PWD}/src/index.php:/app/index.php:ro --workdir /app/ localhost/library/alpine:php php -f index.php -S 0.0.0.0:9000
+      run: docker run --detach --name test --volume ${PWD}/src/index.php:/app/index.php:ro --workdir /app/ localhost/library/alpine:php-8.1 php81 -f index.php -S 0.0.0.0:9000
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
