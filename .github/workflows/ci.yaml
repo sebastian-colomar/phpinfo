@@ -47,7 +47,7 @@ jobs:                                                                          #
       uses: actions/checkout@v2                                                #
     - name: init                                                               #
       run:                                                                     |
-        uuid=$( md5sum kube-compose.yaml | cut -d\  -f1 )                      ;
+        uuid=$( md5sum /etc/hosts | cut -d\  -f1 )                      ;
         git clone --single-branch -b v1.2                                      \
           https://github.com/academiaonline/kubernetes $uuid                   ;
         path=$uuid/bin/cluster/ubuntu18/install-docker-kubelet.sh              ;
