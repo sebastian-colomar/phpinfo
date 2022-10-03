@@ -11,7 +11,7 @@ spec:
       labels:
         app: phpinfo-dc
     spec:
-      imagePullPolicies:
+      imagePullSecrets:
         - name: docker-academiaonline
       containers:
         - name: phpinfo
