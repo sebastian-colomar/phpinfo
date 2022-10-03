@@ -29,8 +29,6 @@ spec:
               value: Sebastian
           securityContext:
               readOnlyRootFilesystem: true
-              runAsUser: 65534
-              runAsGroup: 65534
           volumeMounts:
             - mountPath: /data/index.php
               subPath: index.php
@@ -44,8 +42,6 @@ spec:
             - -S
             - 0.0.0.0:8080
       restartPolicy: Always
-      securityContext:
-        fsGroup: 65534
       volumes:
         - name: phpinfo-volume
           configMap:
