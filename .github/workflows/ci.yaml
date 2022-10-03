@@ -67,4 +67,5 @@ jobs:                                                                          #
             sleep 10                                                           ;
             kubectl exec phpinfo-po -- wget -q -O - localhost:8080 | grep "PHP.*phpinfo()" && break
           done                                                                 ;
+        kubectl get all
 ################################################################################
