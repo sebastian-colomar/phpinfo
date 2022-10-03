@@ -40,4 +40,31 @@ jobs:                                                                          #
             sleep 10                                                           ;
             docker exec test wget -q -O - localhost:9000/index.php | grep "PHP.*phpinfo()" && break ;
           done                                                                 ;
+  kubernetes:                                                                  #
+    runs-on: ubuntu-18.04                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: init                                                               #
+      run:                                                                     |
+        uuid=$( md5sum kube-compose.yaml | cut -d\  -f1 )                      ;
+        git clone --single-branch -b v1.2                                      \
+          https://github.com/academiaonline/kubernetes $uuid                   ;
+        path=$uuid/bin/cluster/ubuntu18/install-docker-kubelet.sh              ;
+        source $path                                                           ;
+        path=$uuid/bin/cluster/ubuntu18/install-leader.sh                      ;
+        source $path                                                           ;
+        master=$( kubectl get node | grep master | awk '{ print $1 }' )        ;
+        kubectl taint node $master node-role.kubernetes.io/master:NoSchedule-  ;
+        rm -rf $uuid                                                           ;
+    - name: apply                                                              #
+      run: kubectl apply -f kubernetes/manifests/                                  ;
+    - name: test                                                               #
+      run:                                                                     |
+        set -x                                                                 ;
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            kubectl get all
+          done                                                                 ;
 ################################################################################
