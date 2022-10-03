@@ -22,4 +22,22 @@ jobs:                                                                          #
             sleep 10                                                           ;
             curl localhost:8080/src/index.php | grep "PHP.*phpinfo()" && break ;
           done                                                                 ;
+  dockerfile:                                                                          #
+    runs-on: ubuntu-18.04                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: docker-build                                                                #
+      run:                                                                     |
+        mkdir --parents build-context/
+        docker build --file docker/Dockerfile --tag localhost/library/alpine:php build-context/ &
+    - name: docker-run
+      run: docker run --detach --name test --volume ${PWD}/src/index.php:/app/index.php:ro --workdir /app/ localhost/library/alpine:php php -f index.php -S 0.0.0.0:9000
+    - name: test                                                               #
+      run:                                                                     |
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            docker exec test curl localhost:9000/index.php | grep "PHP.*phpinfo()" && break ;
+          done                                                                 ;
 ################################################################################
