@@ -17,7 +17,5 @@ services:
         source: index.php
         target: /src/index.php
         type: bind
-        volume:
-          nocopy: true
     working_dir: /src/
 version: "3.9" 
