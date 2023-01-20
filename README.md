@@ -20,7 +20,7 @@ curl localhost:8080/index.php -Is
 ## The container
 In order to containerize the application we can simply run the following command:
 ```
-docker run --detach --entrypoint php --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine -f index.php -S 0.0.0.0:8080
+docker run --detach --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine php -f index.php -S 0.0.0.0:8080
 ```
 You can test the application from inside the container running the following command:
 ```
@@ -75,6 +75,7 @@ configs:
 services:
   phpinfo:
     command:
+      - php
       - -f
       - index.php
       - -S
@@ -86,7 +87,6 @@ services:
         target: /src/index.php
         uid: '65534'
         gid: '65534'
-    entrypoint: php
     image: docker.io/library/php:alpine
     ports:
       - 8080
