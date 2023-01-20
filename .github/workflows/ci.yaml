@@ -40,6 +40,22 @@ jobs:                                                                          #
             sleep 10                                                           ;
             docker exec test wget -q -O - localhost:9000/index.php | grep "PHP.*phpinfo()" && break ;
           done                                                                 ;
+  swarm:                                                                          #
+    runs-on: ubuntu-18.04                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: docker-swarm                                                                #
+      run: docker swarm init
+    - name: docker-stack
+      run: docker stack deploy --compose-file docker/docker-compose.yaml phpinfo
+    - name: test                                                               #
+      run:                                                                     |
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            docker service logs phpinfo_phpinfo | grep "PHP.*phpinfo()" && break ;
+          done           
   kubernetes:                                                                  #
     runs-on: ubuntu-18.04                                                      #
     steps:                                                                     #
