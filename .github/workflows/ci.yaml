@@ -54,7 +54,7 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            docker service logs phpinfo_phpinfo | grep "PHP.*phpinfo()" && break ;
+            docker service logs phpinfo_phpinfo | grep "PHP.*started" && break ;
           done           
   kubernetes:                                                                  #
     runs-on: ubuntu-18.04                                                      #
