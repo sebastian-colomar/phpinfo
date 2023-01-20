@@ -48,7 +48,7 @@ jobs:                                                                          #
     - name: docker-swarm                                                                #
       run: docker swarm init
     - name: docker-stack
-      run: docker stack deploy --compose-file docker/docker-compose.yaml phpinfo
+      run: docker stack deploy --compose-file docker-compose.yaml phpinfo
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
