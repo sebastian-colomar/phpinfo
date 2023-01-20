@@ -14,7 +14,7 @@ services:
     volumes:
       - 
         read_only: true
-        source: index.php
+        source: src/index.php
         target: /src/index.php
         type: bind
     working_dir: /src/
