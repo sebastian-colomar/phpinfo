@@ -89,8 +89,8 @@ services:
         gid: '65534'
     deploy:
       replicas: 1
-      constraints:
-        placement:
+      placement:
+        constraints:
           -  "node.role==worker"
     image: docker.io/library/php:alpine
     ports:
