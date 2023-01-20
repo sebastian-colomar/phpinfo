@@ -87,6 +87,10 @@ services:
         target: /src/index.php
         uid: '65534'
         gid: '65534'
+    deploy:
+      replicas: 1
+      placemente:
+        -  "node.role==worker"
     image: docker.io/library/php:alpine
     ports:
       - 8080
