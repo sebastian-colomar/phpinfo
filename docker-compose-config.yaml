@@ -26,7 +26,7 @@ services:
         limits:
           cpus: '0.01'
           memory: 10M
-        requests:
+        reservations:
           cpus: '0.01'
           memory: 10M
     image: index.docker.io/library/php:alpine
