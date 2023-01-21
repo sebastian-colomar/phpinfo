@@ -1,0 +1,23 @@
+services:
+  phpinfo:
+    command:
+      - php
+      - -f
+      - index.php
+      - -S
+      - 0.0.0.0:8080
+    image: index.docker.io/library/php:alpine
+    ports:
+      - 8080
+    read_only: true
+    restart: always
+    scale: 1
+    user: nobody:nogroup
+    volumes:
+      -
+        read_only: true
+        source: ./src/index.php
+        target: /src/index.php
+        type: bind
+    working_dir: /src/
+version: "2.4"
