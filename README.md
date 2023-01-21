@@ -38,6 +38,10 @@ Or you can just check the container logs:
 ```
 docker logs phpinfo
 ```
+You can remove the container with the following command:
+```
+docker rm --force phpinfo
+```
 ## The compose file
 We can use a compose file instead of manually creating individual containers with the Docker command line.
 The advantages of using compose files are numerous (such as accountability, auditability, collaborative work, transparency, etc.).
@@ -128,7 +132,7 @@ docker node ls
 ```
 If you want to deploy the application in this highly available cluster you will need to first create a compose file:
 ```
-tee docker-compose.yaml 0<<EOF
+tee docker-stack.yaml 0<<EOF
 
 configs:
   my_config:
@@ -172,7 +176,7 @@ EOF
 ```
 Then you will deploy your highly available application with the following command:
 ```
-docker stack deploy -c docker-compose.yaml phpinfo
+docker stack deploy -c docker-stack.yaml phpinfo
 ```
 You can see the result of the deployment with the following commands:
 ```
@@ -183,4 +187,8 @@ docker stack services phpinfo
 You can connect to the web server with the following command:
 ```
 curl localhost:$( docker stack services phpinfo | awk /phpinfo_phpinfo/'{ print $6 }' | cut -d: -f2 | cut -d- -f1 )/index.php -Is
+```
+You can remove the application with the following command:
+```
+docker stack rm phpinfo
 ```
