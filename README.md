@@ -176,7 +176,11 @@ version: "3.8"
 
 EOF
 ```
-Then you will deploy your highly available application with the following command:
+Before deploying your app, we need to re-create the PHP code in this new environment:
+```
+echo '<?php phpinfo();?>' | tee index.php
+```
+You will now deploy your application to high availability with the following command:
 ```
 docker stack deploy --compose-file docker-stack.yaml phpinfo
 ```
