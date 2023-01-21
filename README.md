@@ -38,7 +38,7 @@ Or you can just check the container logs:
 ```
 docker logs phpinfo
 ```
-## The manifest
+## The compose file
 We can use a compose file instead of manually creating individual containers with the Docker command line.
 The advantages of using compose files are numerous (such as accountability, auditability, collaborative work, transparency, etc.).
 Run the following command to create a Docker compose file:
