@@ -1,7 +1,11 @@
 # phpinfo
-## Sample PHP application to help learning about Docker containers and Kubernetes orchestration
+## Sample PHP web application to help learning about Docker containers and Kubernetes orchestration
 
 [![CI](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml)
+## The testing environment
+We can use any available Linux shell to run the exercises.
+In our case we are going to use Google Cloud Shell:
+- https://shell.cloud.google.com
 
 ## The application
 The application is very simple.
@@ -32,10 +36,10 @@ curl localhost:$( docker port phpinfo | cut -d: -f2 )/index.php -Is
 ```
 
 ## The orchestrator
-Though the previous method is perfectly appropriate in order to run our application it will not provide high availability.
-If the node is down then our application will also be down.
-In order to avoid that situation we need a cluster of several nodes so that when one node is down then the other node will take the workload of the affected node.
-We can easily create a cluster in this Lab environment:
+Although the above method is perfectly suitable for running our application, it will not provide high availability.
+If the node is down, our application will be down too.
+To avoid that situation, we need a multi-node cluster so that when one node is down, the other node takes the workload of the affected node.
+We can easily create a cluster in this lab environment:
 - https://labs.play-with-docker.com
 
 You will first need to create a free Docker account in order to login to the Docker Playground:
