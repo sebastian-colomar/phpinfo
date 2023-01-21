@@ -194,6 +194,10 @@ You can connect to the web server with the following command:
 ```
 curl localhost:$( docker stack services phpinfo | awk /phpinfo_phpinfo/'{ print $6 }' | cut -d: -f2 | cut -d- -f1 )/index.php -Is
 ```
+You can also check the service logs:
+```
+docker service logs phpinfo_phpinfo
+```
 You can remove the application with the following command:
 ```
 docker stack rm phpinfo
