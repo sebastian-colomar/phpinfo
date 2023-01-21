@@ -1,0 +1,33 @@
+# docker run --detach --entrypoint php --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/src/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine -f index.php -S 0.0.0.0:8080
+services:
+  phpinfo:
+    command:
+      - php
+      - -f
+      - index.php
+      - -S
+      - 0.0.0.0:8080
+    deploy:
+      placement:
+        constraints:
+          -  "node.role==worker"
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 10M
+        requests:
+          cpus: '0.01'
+          memory: 10M
+    image: index.docker.io/library/php:alpine
+    ports:
+      - 8080
+    user: nobody:nogroup
+    volumes:
+      - 
+        read_only: true
+        source: src/index.php
+        target: /src/index.php
+        type: bind
+    working_dir: /src/
+version: "3.9"
