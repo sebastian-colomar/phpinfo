@@ -32,15 +32,15 @@ jobs:                                                                          #
         mkdir --parents build-context/
         docker build --file docker/Dockerfile --tag localhost/library/alpine:php-8.1 build-context/
     - name: docker-run
-      run: docker run --detach --name test --volume ${PWD}/src/index.php:/app/index.php:ro --workdir /app/ localhost/library/alpine:php-8.1 php81 -f index.php -S 0.0.0.0:9000
+      run: docker run --cpus 0.01 --detach --memory 10M --memory-reservation 10M --name test --publish 80:8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ index.docker.io/library/php:alpine php -f index.php -S 0.0.0.0:8080
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            docker exec test wget -q -O - localhost:9000/index.php | grep "PHP.*phpinfo()" && break ;
+            docker exec test wget -q -O - localhost/index.php | grep "PHP.*phpinfo()" && break ;
           done                                                                 ;
-  swarm:                                                                          #
+  swarm-config:                                                                          #
     runs-on: ubuntu-18.04                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
@@ -48,7 +48,7 @@ jobs:                                                                          #
     - name: docker-swarm                                                                #
       run: docker swarm init
     - name: docker-stack
-      run: docker stack deploy --compose-file docker-compose.yaml phpinfo
+      run: docker stack deploy --compose-file docker-compose-config.yaml phpinfo
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
