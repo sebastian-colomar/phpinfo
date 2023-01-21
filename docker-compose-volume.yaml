@@ -1,4 +1,4 @@
-# docker run --detach --entrypoint php --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/src/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine -f index.php -S 0.0.0.0:8080
+# docker run --cpus 0.01 --detach --memory 10M --memory-reservation 10M --name test --publish 80:8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/src/index.php:/src/index.php:ro --workdir /src/ index.docker.io/library/php:alpine php -f index.php -S 0.0.0.0:8080
 services:
   phpinfo:
     command:
@@ -16,12 +16,13 @@ services:
         limits:
           cpus: '0.01'
           memory: 10M
-        requests:
+        reservations:
           cpus: '0.01'
           memory: 10M
     image: index.docker.io/library/php:alpine
     ports:
       - 8080
+    read_only: true
     user: nobody:nogroup
     volumes:
       - 
