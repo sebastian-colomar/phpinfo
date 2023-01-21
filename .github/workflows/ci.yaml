@@ -30,9 +30,9 @@ jobs:                                                                          #
     - name: docker-build                                                                #
       run:                                                                     |
         mkdir --parents build-context/
-        docker build --file docker/Dockerfile --tag localhost/library/alpine:php-8.1 build-context/
+        docker build --file Dockerfile --tag localhost/library/my_image:test build-context/
     - name: docker-run
-      run: docker run --cpus 0.01 --detach --memory 10M --memory-reservation 10M --name phpinfo --publish 80:8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ index.docker.io/library/php:alpine php -f index.php -S 0.0.0.0:8080
+      run: docker run --cpus 0.01 --detach --memory 10M --memory-reservation 10M --name phpinfo --publish 80:8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ localhost/library/my_image:test php81 -f index.php -S 0.0.0.0:8080
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
@@ -49,6 +49,22 @@ jobs:                                                                          #
       run: docker swarm init
     - name: docker-stack
       run: docker stack deploy --compose-file docker-compose-config.yaml phpinfo
+    - name: test                                                               #
+      run:                                                                     |
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            docker service logs phpinfo_phpinfo 2>& 1 | grep "PHP.*started" && break ;
+          done           
+  swarm-secret:                                                                          #
+    runs-on: ubuntu-18.04                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: docker-swarm                                                                #
+      run: docker swarm init
+    - name: docker-stack
+      run: docker stack deploy --compose-file docker-compose-secret.yaml phpinfo
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
