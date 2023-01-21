@@ -38,7 +38,37 @@ Or you can just check the container logs:
 ```
 docker logs phpinfo
 ```
+## The manifest
+We can use a compose file instead of manually creating an individual container with the Docker command line.
+The advantages of using compose files are numerous (such as accountability, auditability, collaborative work, transparency, etc.).
+Run the following command to create a Docker compose file:
+```
+tee docker-compose.yaml 0<<EOF
 
+services:
+  phpinfo:
+    command:
+      - php
+      - -f
+      - index.php
+      - -S
+      - 0.0.0.0:8080
+    image: index.docker.io/library/php:alpine
+    ports:
+      - 8080
+    read_only: true
+    restart: always
+    scale: 1
+    user: nobody:nogroup
+    working_dir: /src/
+version: "2.4"
+
+EOF
+```
+Once the file has been created, you can deploy the application with the following command:
+```
+docker-compose up
+```
 ## The orchestrator
 Although the above method is perfectly suitable for running our application, it will not provide high availability.
 If the node is down, our application will be down too.
