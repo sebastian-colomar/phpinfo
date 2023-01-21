@@ -126,7 +126,9 @@ This will be the output of the previous command on the second instance:
 ```
 This node joined a swarm as a worker.
 ```
-Now we can run the following command on the first instance in order to check the cluster availability:
+We repeat the same operation to add a second worker node to the cluster.
+
+Now we can run the following command on the first master instance in order to check the cluster availability:
 ```
 docker node ls
 ```
