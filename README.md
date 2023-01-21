@@ -163,7 +163,7 @@ services:
         limits:
           cpus: '0.01'
           memory: 10M
-        requests:
+        reservations:
           cpus: '0.01'
           memory: 10M
     image: index.docker.io/library/php:alpine
@@ -178,7 +178,7 @@ EOF
 ```
 Then you will deploy your highly available application with the following command:
 ```
-docker stack deploy -c docker-stack.yaml phpinfo
+docker stack deploy --compose-file docker-stack.yaml phpinfo
 ```
 You can see the result of the deployment with the following commands:
 ```
