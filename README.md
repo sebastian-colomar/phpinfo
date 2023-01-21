@@ -20,7 +20,7 @@ curl localhost:8080/index.php -Is
 ## The container
 In order to containerize the application we can simply run the following command:
 ```
-docker run --detach --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine php -f index.php -S 0.0.0.0:8080
+docker run --cpus 0.01 --detach --memory 10M --memory-reservation 10M --name phpinfo --publish 8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ index.docker.io/library/php:alpine php -f index.php -S 0.0.0.0:8080
 ```
 You can test the application from inside the container running the following command:
 ```
@@ -69,8 +69,9 @@ docker node ls
 If you want to deploy the application in this highly available cluster you will need to first create a compose file:
 ```
 tee docker-compose.yaml 0<<EOF
+
 configs:
-  config-file:
+  my_config:
     file: ${PWD}/index.php
 services:
   phpinfo:
@@ -83,21 +84,30 @@ services:
     configs:
       - 
         mode: 0400
-        source: config-file
+        source: my_config
         target: /src/index.php
         uid: '65534'
         gid: '65534'
     deploy:
-      replicas: 1
       placement:
         constraints:
           -  "node.role==worker"
-    image: docker.io/library/php:alpine
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 10M
+        requests:
+          cpus: '0.01'
+          memory: 10M
+    image: index.docker.io/library/php:alpine
     ports:
       - 8080
-    user: nobody:nobody
+    read_only: true
+    user: nobody:nogroup
     working_dir: /src/
 version: "3.8"
+
 EOF
 ```
 Then you will deploy your highly available application with the following command:
