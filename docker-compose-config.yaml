@@ -1,0 +1,38 @@
+# docker run --detach --entrypoint php --name phpinfo --publish 8080 --user nobody:nogroup --volume ${PWD}/src/index.php:/src/index.php:ro --workdir /src/ docker.io/library/php:alpine -f index.php -S 0.0.0.0:8080
+configs:
+  my_config:
+    file: ${PWD}/src/index.php
+services:
+  phpinfo:
+    command:
+      - php
+      - -f
+      - index.php
+      - -S
+      - 0.0.0.0:8080
+    configs:
+      - 
+        gid: '65534'
+        mode: 0400
+        source: my_config
+        target: /src/index.php
+        uid: '65534'
+    deploy:
+#      placement:
+#        constraints:
+#          -  "node.role==worker"
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 10M
+        requests:
+          cpus: '0.01'
+          memory: 10M
+    image: index.docker.io/library/php:alpine
+    ports:
+      - 8080
+    read_only: true
+    user: nobody:nogroup
+    working_dir: /src/
+version: "3.8" 
