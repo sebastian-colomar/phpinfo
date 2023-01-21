@@ -8,9 +8,9 @@ services:
       - -S
       - 0.0.0.0:8080
     deploy:
-      placement:
-        constraints:
-          -  "node.role==worker"
+#      placement:
+#        constraints:
+#          -  "node.role==worker"
       replicas: 1
       resources:
         limits:
@@ -31,4 +31,4 @@ services:
         target: /src/index.php
         type: bind
     working_dir: /src/
-version: "3.9"
+version: "3.8"
