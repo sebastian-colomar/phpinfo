@@ -34,6 +34,10 @@ Or you can test the application from outside the container with the following co
 ```
 curl localhost:$( docker port phpinfo | cut -d: -f2 )/index.php -Is
 ```
+Or you can just check the container logs:
+```
+docker logs phpinfo
+```
 
 ## The orchestrator
 Although the above method is perfectly suitable for running our application, it will not provide high availability.
