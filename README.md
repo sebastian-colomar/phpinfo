@@ -39,7 +39,7 @@ Or you can just check the container logs:
 docker logs phpinfo
 ```
 ## The manifest
-We can use a compose file instead of manually creating an individual container with the Docker command line.
+We can use a compose file instead of manually creating individual containers with the Docker command line.
 The advantages of using compose files are numerous (such as accountability, auditability, collaborative work, transparency, etc.).
 Run the following command to create a Docker compose file:
 ```
@@ -60,14 +60,32 @@ services:
     restart: always
     scale: 1
     user: nobody:nogroup
+    volumes:
+      - 
+        read_only: true
+        source: src/index.php
+        target: /src/index.php
+        type: bind
     working_dir: /src/
-version: "2.4"
+    version: "2.4"
 
 EOF
 ```
 Once the file has been created, you can deploy the application with the following command:
 ```
-docker-compose up
+docker-compose up --detach
+```
+You can check the logs with the following command:
+```
+docker-compose logs
+```
+You can display the running processes with the following command:
+```
+docker-compose top
+```
+You can remove the application with the following command:
+```
+docker-compose down
 ```
 ## The orchestrator
 Although the above method is perfectly suitable for running our application, it will not provide high availability.
