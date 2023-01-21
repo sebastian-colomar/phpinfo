@@ -40,6 +40,20 @@ jobs:                                                                          #
             sleep 10                                                           ;
             docker logs phpinfo 2>& 1 | grep "PHP.*started" && break ;
           done                                                                 ;
+  docker-compose:                                                                          #
+    runs-on: ubuntu-18.04                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: docker-compose
+      run: docker-compose up --detach
+    - name: test                                                               #
+      run:                                                                     |
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            docker-compose logs 2>& 1 | grep "PHP.*started" && break ;
+          done           
   swarm-config:                                                                          #
     runs-on: ubuntu-18.04                                                      #
     steps:                                                                     #
@@ -48,7 +62,7 @@ jobs:                                                                          #
     - name: docker-swarm                                                                #
       run: docker swarm init
     - name: docker-stack
-      run: docker stack deploy --compose-file docker-compose-config.yaml phpinfo
+      run: docker stack deploy --compose-file docker-stack-config.yaml phpinfo
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
@@ -64,7 +78,7 @@ jobs:                                                                          #
     - name: docker-swarm                                                                #
       run: docker swarm init
     - name: docker-stack
-      run: docker stack deploy --compose-file docker-compose-secret.yaml phpinfo
+      run: docker stack deploy --compose-file docker-stack-secret.yaml phpinfo
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
@@ -80,7 +94,7 @@ jobs:                                                                          #
     - name: docker-swarm                                                                #
       run: docker swarm init
     - name: docker-stack
-      run: docker stack deploy --compose-file docker-compose-volume.yaml phpinfo
+      run: docker stack deploy --compose-file docker-stack-volume.yaml phpinfo
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
