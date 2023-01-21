@@ -61,13 +61,13 @@ services:
     scale: 1
     user: nobody:nogroup
     volumes:
-      - 
+      -
         read_only: true
-        source: src/index.php
+        source: ./index.php
         target: /src/index.php
         type: bind
     working_dir: /src/
-    version: "2.4"
+version: "2.4"
 
 EOF
 ```
