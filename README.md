@@ -83,6 +83,10 @@ You can display the running processes with the following command:
 ```
 docker-compose top
 ```
+You can test the connection to the web server using the following command:
+```
+curl localhost:$( docker-compose ps | grep phpinfo | awk '{ print $6 }' | cut -d : -f 2 | cut -d - -f 1 )/index.php -Is
+```
 You can remove the application with the following command:
 ```
 docker-compose down
