@@ -1,5 +1,5 @@
 # phpinfo
-## Sample PHP web application to help learning about Docker containers and Kubernetes orchestration
+## Sample PHP application to help learning about Docker containers and Kubernetes orchestration
 
 [![CI](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml)
 ## The testing environment
