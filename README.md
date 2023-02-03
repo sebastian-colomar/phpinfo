@@ -80,7 +80,7 @@ EOF
 ```
 Once the file has been created, you can deploy the application with the following command:
 ```
-docker-compose up --detach
+docker-compose up
 ```
 You can check the logs with the following command:
 ```
