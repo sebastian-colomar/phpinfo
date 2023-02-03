@@ -57,7 +57,10 @@ services:
       - index.php
       - -S
       - 0.0.0.0:8080
+    cpus: 0.01
     image: index.docker.io/library/php:alpine
+    mem_limit: 10M
+    mem_reservation: 10M
     ports:
       - 8080
     read_only: true
