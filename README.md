@@ -28,7 +28,7 @@ docker run --cpus 0.01 --detach --memory 10M --memory-reservation 10M --name php
 ```
 You can test the application from inside the container running the following command:
 ```
-docker exec phpinfo curl localhost:8080/index.php -Is
+docker exec phpinfo wget http://localhost:8080/index.php -O - -q -S --spider
 ```
 Or you can test the application from outside the container with the following command:
 ```
