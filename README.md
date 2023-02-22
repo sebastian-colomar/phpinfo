@@ -42,6 +42,30 @@ You can remove the container with the following command:
 ```
 docker rm --force phpinfo
 ```
+
+## The image
+The above command will launch a container running an operating system downloaded from the public library hosted at index.docker.io, i.e. Docker Hub.
+The exact image you are going to use is called php:alpine, which means that it is based on the basic Linux Alpine operating system with the PHP binaries included.
+
+In case you need to customize this operating system image, you can do it with a Dockerfile. For example:
+```
+tee Dockerfile 0<<EOF
+
+FROM index.docker.io/library/alpine:latest
+RUN  apk add php
+
+EOF
+```
+The above block will create a Dockerfile with instructions for downloading a basic Alpine Linux operating system with the latest version and adding the PHP binaries.
+You can then build the Docker image with the following command:
+```
+docker build --tag localhost/my_library/my_php:alpine
+```
+You can then run the container with a command similar to the one in the previous section:
+```
+docker run --cpus 0.01 --memory 10M --memory-reservation 10M --name phpinfo --publish 8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ localhots/my_library/my_php:alpine php -f index.php -S 0.0.0.0:8080
+```
+
 ## The compose file
 We can use a compose file instead of manually creating individual containers with the Docker command line.
 The advantages of using compose files are numerous (such as accountability, auditability, collaborative work, transparency, etc.).
