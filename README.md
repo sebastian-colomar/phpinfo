@@ -59,7 +59,7 @@ EOF
 The above block will create a Dockerfile with instructions for downloading a basic Alpine Linux operating system with the latest version and adding the PHP binaries.
 You can then build the Docker image with the following command:
 ```
-docker build --tag localhost/my_library/my_php:alpine
+docker build --tag localhost/my_library/my_php:alpine .
 ```
 You can then run the container with a command similar to the one in the previous section:
 ```
