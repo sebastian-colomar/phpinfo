@@ -63,7 +63,7 @@ docker build --tag localhost/my_library/my_php:alpine .
 ```
 You can then run the container with a command similar to the one in the previous section:
 ```
-docker run --cpus 0.01 --memory 10M --memory-reservation 10M --name phpinfo --publish 8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ localhots/my_library/my_php:alpine php -f index.php -S 0.0.0.0:8080
+docker run --cpus 0.01 --memory 10M --memory-reservation 10M --name phpinfo --publish 8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ localhost/my_library/my_php:alpine php -f index.php -S 0.0.0.0:8080
 ```
 
 ## The compose file
