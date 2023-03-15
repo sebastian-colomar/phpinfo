@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "phpinfo.fullname" . }}
+  labels:
+    {{- include "phpinfo.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "phpinfo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "phpinfo.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-container
+          args:
+            {{- toYaml .Values.containers.args | nindent 12 }}
+          command:
+            {{- toYaml .Values.containers.command | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          livenessProbe: {{ toYaml .Values.containers.livenessProbe | nindent 12 }}
+          ports:
+            {{- toYaml .Values.containers.ports | nindent 12 }}
+          readinessProbe: {{ toYaml .Values.containers.livenessProbe | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.containers.volumeMounts | nindent 12 }}
+          workingDir: {{ .Values.containers.workingDir }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

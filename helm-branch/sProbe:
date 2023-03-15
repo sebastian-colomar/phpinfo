@@ -1,0 +1,117 @@
+NAME: test
+LAST DEPLOYED: Thu Jan 27 11:11:09 2022
+NAMESPACE: test
+STATUS: pending-install
+REVISION: 1
+HOOKS:
+---
+# Source: phpinfo/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "test-phpinfo-test-connection"
+  labels:
+    helm.sh/chart: phpinfo-0.1.0
+    app.kubernetes.io/name: phpinfo
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['test-phpinfo:80']
+  restartPolicy: Never
+MANIFEST:
+---
+# Source: phpinfo/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-phpinfo
+  labels:
+    helm.sh/chart: phpinfo-0.1.0
+    app.kubernetes.io/name: phpinfo
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: phpinfo/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-phpinfo
+  labels:
+    helm.sh/chart: phpinfo-0.1.0
+    app.kubernetes.io/name: phpinfo
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: phpinfo
+    app.kubernetes.io/instance: test
+---
+# Source: phpinfo/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-phpinfo
+  labels:
+    helm.sh/chart: phpinfo-0.1.0
+    app.kubernetes.io/name: phpinfo
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: phpinfo
+      app.kubernetes.io/instance: test
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: phpinfo
+        app.kubernetes.io/instance: test
+    spec:
+      imagePullSecrets:
+        - name: docker-login
+      serviceAccountName: test-phpinfo
+      securityContext:
+        {}
+      containers:
+        - name: phpinfo
+          securityContext:
+            {}
+          image: "php:1.16.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe: 
+            httpGet:
+              path: /
+              port: 8080
+          readinessProbe: 
+            httpGet:
+              path: /
+              port: 8080
+          resources:
+            {}
+
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace test -l "app.kubernetes.io/name=phpinfo,app.kubernetes.io/instance=test" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace test $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace test port-forward $POD_NAME 8080:$CONTAINER_PORT

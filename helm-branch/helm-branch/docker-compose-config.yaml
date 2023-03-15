@@ -1,0 +1,22 @@
+configs:
+  index.php:
+    file: ./src/index.php
+services:
+  phpinfo:
+    command: -f index.php -S 0.0.0.0:8080
+    configs:
+      - 
+        mode: 0400
+        source: index.php
+        target: /src/index.php
+    deploy:
+      placement:
+        constraints:
+          - "node.role==worker"
+      replicas: 2
+    entrypoint: php
+    image: phpinfo:2022-01
+    ports:
+      - "30000:8080"
+    working_dir: /src/
+version: "3.8"  
