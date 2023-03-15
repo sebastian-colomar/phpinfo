@@ -1,0 +1,165 @@
+# git clone https://github.com/academiaonline/phpinfo
+# cd phpinfo/
+# git checkout 2021-10
+# kubectl create ns phpinfo
+# kubectl create cm phpinfo-cm --from-file ./src/index.php --namespace phpinfo
+# kubectl apply --filename kube-compose.yaml --namespace phpinfo
+# kubectl get all --namespace phpinfo --output wide
+# kubectl logs phpinfo-po --namespace phpinfo
+# kubectl --namespace phpinfo exec pod/phpinfo-po -- wget --spider -q -S http://phpinfo-svc/src/index.php
+# kubectl --namespace phpinfo exec pod/phpinfo-po -- nslookup phpinfo-svc
+# kubectl --namespace phpinfo exec pod/phpinfo-po -- nslookup phpinfo-svc.phpinfo.svc.cluster.local
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: phpinfo
+    version: 2021-10
+  name: phpinfo-po
+spec:
+  containers:
+    -
+      args:
+        - -f
+        - src/index.php
+        - -S
+        - 0.0.0.0:8080
+      image: academiaonline/phpinfo:2021-10
+      name: phpinfo-container
+      ports:
+        - 
+          containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        -
+          mountPath: /src/index.php
+          name: phpinfo-volume
+          readOnly: true
+          subPath: index.php
+  volumes:
+    -
+      configMap:
+        defaultMode: 0400
+        items:
+          -
+            key: index.php
+            mode: 0400
+            path: index.php
+        name: phpinfo-cm
+      name: phpinfo-volume
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo-svc
+spec:
+  ports:
+    -
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: phpinfo
+    version: 2021-10
+  type: ClusterIP
+  
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: phpinfo-rc
+spec:
+  replicas: 2
+  selector:
+    app: phpinfo
+    version: 2021-10
+  template:
+    metadata:
+      labels:
+        app: phpinfo
+        version: 2021-10
+    spec:
+      containers:
+        -
+          args:
+            - -f
+            - src/index.php
+            - -S
+            - 0.0.0.0:8080
+          image: academiaonline/phpinfo:2021-10
+          name: phpinfo-container
+          ports:
+            - 
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /src/index.php
+              name: phpinfo-volume
+              readOnly: true
+              subPath: index.php
+      volumes:
+        -
+          configMap:
+            defaultMode: 0400
+            items:
+              -
+                key: index.php
+                mode: 0400
+                path: index.php
+            name: phpinfo-cm
+          name: phpinfo-volume
+
+---
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: phpinfo-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: phpinfo
+      version: 2021-10
+  template:
+    metadata:
+      labels:
+        app: phpinfo
+        version: 2021-10
+    spec:
+      containers:
+        -
+          args:
+            - -f
+            - src/index.php
+            - -S
+            - 0.0.0.0:8080
+          image: academiaonline/phpinfo:2021-10
+          name: phpinfo-container
+          ports:
+            - 
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /src/index.php
+              name: phpinfo-volume
+              readOnly: true
+              subPath: index.php
+      volumes:
+        -
+          configMap:
+            defaultMode: 0400
+            items:
+              -
+                key: index.php
+                mode: 0400
+                path: index.php
+            name: phpinfo-cm
+          name: phpinfo-volume
+

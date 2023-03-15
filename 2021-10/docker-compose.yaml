@@ -1,0 +1,38 @@
+# git clone https://github.com/academiaonline/phpinfo
+# cd phpinfo/
+# git checkout 2021-10
+# git pull
+# docker build --file Dockerfile --tag academiaonline/phpinfo:2021-10 .
+# docker login
+# docker push academiaonline/phpinfo:2021-10
+# docker run --detach --name phpinfo --publish 8080 --volume ${PWD}/src/index.php:/src/index.php:ro academiaonline/phpinfo:2021-10 -f src/index.php -S 0.0.0.0:8080
+# docker swarm init
+# docker stack deploy --compose-file docker-compose.yaml PHPINFO
+# docker stack ls
+# docker stack services PHPINFO
+# docker stack ps PHPINFO
+# curl localhost:$( docker stack services PHPINFO | awk --field-separator '->' /PHPINFO/'{ print $1 }' | cut --delimiter : --field 3 )/src/index.php
+
+configs:
+  phpinfo:
+    file: ./src/index.php
+services:
+  phpinfo:
+    command:
+      - -f
+      - src/index.php
+      - -S
+      - 0.0.0.0:8080
+    configs:
+      - 
+        mode: 0400
+        source: phpinfo
+        target: /src/index.php
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker     
+    image: academiaonline/phpinfo:2021-10
+    ports:
+      - 8080
+version: '3.8'
