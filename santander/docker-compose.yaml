@@ -1,0 +1,25 @@
+# docker run -d --entrypoint /usr/bin/php --name phpinfo -p 8080:8080 --restart always -v ${PWD}/src/index.php:/src/index.php:ro javier2577/phpinfo:santander-optimizado -f src/index.php -S 0.0.0.0:8080
+configs:
+  phpinfo:
+   file: ./src/index.php
+services:
+  phpinfo: 
+    command:
+     -  -f
+     -  src/index.php
+     -  -S
+     -  0.0.0.0:8080
+    configs:
+     - 
+      mode: 0400
+      source: phpinfo
+      target: /src/index.php
+    deploy: 
+     placement:
+      constraints:
+        - node.role == worker
+    entrypoint: /usr/bin/php
+    image: javier2577/phpinfo:santander-optimizado
+    ports:
+     - 8080:8080
+ version: '3.8'
