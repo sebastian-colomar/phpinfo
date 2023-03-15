@@ -1,0 +1,37 @@
+################################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza             #
+#      SPDX-License-Identifier:  GPL-2.0-only                                  #
+################################################################################
+networks:
+  phpinfo:
+    internal: true
+services:
+  phpinfo:
+    deploy:
+      mode: replicated
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 100M
+        reservations:
+          cpus: "0.1"
+          memory: 100M
+    expose:
+    - "8080"
+    healthcheck:
+      interval: 10s
+      retries: 3
+      start_period: 30s
+      test: php -r "print file_get_contents('http://localhost:8080/');"
+      timeout: 1s
+    image: academiaonline/phpinfo:latest
+    networks:
+    - phpinfo
+    ports:
+    - "30000:8080"
+version: "3.8"
+################################################################################

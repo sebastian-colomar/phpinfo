@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: phpinfo
+  template:
+    metadata:
+      labels:
+        app: phpinfo
+    spec:
+      containers:
+      - name: phpinfo
+        image: academiaonline/phpinfo:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          failureThreshold: 3
+          initialDelaySeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100M
+          requests:
+            cpu: 100m
+            memory: 100M
+

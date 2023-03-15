@@ -1,0 +1,43 @@
+#########################################################################
+#      Copyright (C) 2020        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpinfo
+  template:
+    metadata:
+      labels:
+        app: phpinfo
+    spec:
+      containers:
+      -
+        name: phpinfo
+        image: academiaonline/phpinfo:2.0
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+        ports:
+          - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100M
+          requests:
+            cpu: 100m
+            memory: 100M

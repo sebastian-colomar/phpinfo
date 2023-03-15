@@ -1,0 +1,11 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: phpinfo
+spec:
+  podSelector:
+    matchLabels:
+      app: phpinfo
+  ingress:
+  - ports:
+    - port: 8080
