@@ -1,0 +1,150 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: phpinfo-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: phpinfo
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - phpinfo-gateway
+  http:
+  - match:
+    - uri:
+        exact: /phpinfo/
+    route:
+    - destination:
+        host: phpinfo
+        port:
+          number: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo
+  labels:
+    app: phpinfo
+    service: phpinfo
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: phpinfo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-v1
+  labels:
+    app: phpinfo
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpinfo
+      version: v1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: phpinfo
+        version: v1
+    spec:
+      containers:
+      - name: phpinfo
+        image: secobau/phpinfo:1.4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-v2
+  labels:
+    app: phpinfo
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpinfo
+      version: v2
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: phpinfo
+        version: v2
+    spec:
+      containers:
+      - name: phpinfo
+        image: secobau/phpinfo:1.5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-v3
+  labels:
+    app: phpinfo
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpinfo
+      version: v3
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: phpinfo
+        version: v3
+    spec:
+      containers:
+      - name: phpinfo
+        image: secobau/phpinfo:1.6
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: phpinfo
+spec:
+  host: phpinfo
+  subsets:
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+  - name: v3
+    labels:
+      version: v3
+---
