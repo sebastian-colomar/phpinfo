@@ -1,9 +1,9 @@
-[![CI](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml/badge.svg?branch=2022-01)](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml)
+[![CI](https://github.com/sebastian-colomar/phpinfo/actions/workflows/ci.yaml/badge.svg?branch=2022-01)](https://github.com/sebastian-colomar/phpinfo/actions/workflows/ci.yaml)
 
 # RUN phpinfo WITHOUT CONTAINERIZATION
 
 ```
-git clone https://github.com/academiaonline-org/phpinfo
+git clone https://github.com/sebastian-colomar/phpinfo
 cd phpinfo
 git checkout main
 ```
@@ -17,7 +17,7 @@ curl localhost:8080/src/index.php
 # RUN phpinfo WITH CONTAINERIZATION (docker run)
 
 ```
-git clone https://github.com/academiaonline-org/phpinfo
+git clone https://github.com/sebastian-colomar/phpinfo
 cd phpinfo
 git checkout 2022-01
 ```
@@ -37,7 +37,7 @@ curl localhost:XXXX/index.php
 # RUN phpinfo WITH CONTAINERIZATION (docker stack)
 
 ```
-git clone https://github.com/academiaonline-org/phpinfo
+git clone https://github.com/sebastian-colomar/phpinfo
 cd phpinfo
 git checkout 2022-01
 ```

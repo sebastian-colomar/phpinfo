@@ -32,7 +32,7 @@ spec:
   initContainers:
     - name: phpinfo-init-container
       args:
-        - git clone --branch main --single-branch https://github.com/academiaonline-org/phpinfo ; cp -v ./phpinfo/src/index.php /src/index.php
+        - git clone --branch main --single-branch https://github.com/sebastian-colomar/phpinfo ; cp -v ./phpinfo/src/index.php /src/index.php
       command:
         - sh
         - -c

@@ -1,7 +1,7 @@
 # phpinfo
 ## Sample PHP application to help learning about Docker containers and Kubernetes orchestration
 
-[![CI](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/academiaonline-org/phpinfo/actions/workflows/ci.yaml)
+[![CI](https://github.com/sebastian-colomar/phpinfo/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/sebastian-colomar/phpinfo/actions/workflows/ci.yaml)
 ## The testing environment
 We can use any available Linux shell to run the exercises.
 In our case we are going to use Google Cloud Shell:
