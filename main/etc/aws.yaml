@@ -390,7 +390,7 @@ Resources:
         DNSName: !GetAtt LoadBalancer.DNSName
         HostedZoneId: !GetAtt LoadBalancer.CanonicalHostedZoneID
       HostedZoneName: !Sub '${HostedZoneName}.'
-      Name: !Sub '${RecordSetName1}.${HostedZoneName}'
+      Name: !Sub '${RecordSetName}.${HostedZoneName}'
       Type: A
     Type: AWS::Route53::RecordSet
       
