@@ -133,7 +133,7 @@ Parameters:
   InstanceWorkerImageId:
     #Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
     # Amazon Linux 2023 in Mumbai
-    Default: 'ami-0a4a70bd98c6d6441'
+    Default: 'ami-0b9ecf71fe947bbdd'
     Description: >
       Select AMI to use for the Cluster Worker instances. 
       When it's left blank, the default AMI for your AWS region will be used. 
