@@ -165,7 +165,7 @@ Parameters:
     Type: Number
     
   PortTargetGroup:
-    Default: 443
+    Default: 30000
     Description: >
       The internal listening port for Target Group.
     Type: Number
