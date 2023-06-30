@@ -1,0 +1,38 @@
+# docker run --cpus 0.01 --detach --memory 10M --memory-reservation 10M --name phpinfo --publish 8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ index.docker.io/library/php:alpine php -f index.php -S 0.0.0.0:8080
+secrets:
+  my_secret:
+    file: ${PWD}/index.php
+services:
+  phpinfo:
+    command:
+      - php
+      - -f
+      - index.php
+      - -S
+      - 0.0.0.0:8080
+    secrets:
+      - 
+        gid: '65534'
+        mode: 0400
+        source: my_secret
+        target: /src/index.php
+        uid: '65534'
+    deploy:
+      placement:
+        constraints:
+          -  "node.role==worker"
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 10M
+        reservations:
+          cpus: '0.01'
+          memory: 10M
+    image: index.docker.io/library/php:alpine
+    ports:
+      - 8080
+    read_only: true
+    user: nobody:nogroup
+    working_dir: /src/
+version: "3.9" 
