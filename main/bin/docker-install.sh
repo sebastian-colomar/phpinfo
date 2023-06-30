@@ -1,2 +1,3 @@
-sudo yum install -y docker git
-sudo systemctl enable --now docker
+#!/bin/sh
+yum install -y docker git
+systemctl enable --now docker
