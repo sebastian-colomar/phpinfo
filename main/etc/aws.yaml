@@ -183,7 +183,7 @@ Parameters:
     Type: String
     
   ProtocolTargetGroup:
-    Default: HTTPS
+    Default: HTTP
     Description: >
       The internal protocol for Target Group.
     Type: String
