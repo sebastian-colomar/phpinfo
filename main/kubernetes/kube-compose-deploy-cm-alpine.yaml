@@ -1,0 +1,83 @@
+#########################################################################
+#      Copyright (C) 2023        Sebastian Francisco Colomar Bauza      #
+#      SPDX-License-Identifier:  GPL-2.0-only                           #
+#########################################################################
+# docker run --detach --cpus 0.01 --env AUTHOR=Sebastian --memory 10M --memory-reservation 10M --name phpinfo --publish 8080 --read-only --restart always --user nobody:nogroup --volume ${PWD}/index.php:/src/index.php:ro --workdir /src/ index.docker.io/library/php:alpine php -f index.php -S 0.0.0.0:8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: phpinfo-cm
+data:
+  index.php: |-
+    <?php
+      phpinfo();
+    ?>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-deploy
+spec:
+  selector:
+    matchLabels:
+      app: phpinfo-deploy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: phpinfo-deploy
+    spec:
+      containers:
+        - name: phpinfo
+          image: index.docker.io/library/php:alpine
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 10m
+              memory: 10M
+            requests:
+              cpu: 10m
+              memory: 10M
+          env:
+            - name: AUTHOR
+              value: Sebastian
+          securityContext:
+              readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /src/index.php
+              subPath: index.php
+              name: phpinfo-volume
+              readOnly: true
+          workingDir: /src/
+          args:
+            - php
+            - -f
+            - index.php
+            - -S
+            - 0.0.0.0:8080
+      restartPolicy: Always
+      volumes:
+        - name: phpinfo-volume
+          configMap:
+              defaultMode: 0400
+              items:
+                - key: index.php
+                  path: index.php
+                  mode: 0400
+              name: phpinfo-cm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo-svc
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: phpinfo-deploy
+  type: NodePort
+---
