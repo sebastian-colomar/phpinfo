@@ -28,8 +28,7 @@ spec:
           securityContext:
               readOnlyRootFilesystem: false
           volumeMounts:
-            - mountPath: /src/index.php
-              subPath: index.php
+            - mountPath: /src/
               name: phpinfo-volume
               readOnly: false
           workingDir: /src/
