@@ -75,6 +75,7 @@ kind: Route
 metadata:
   name: phpinfo-oadp-route
 spec:
+  path: /index.php
   tls:
     termination: edge
   to:
