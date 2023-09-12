@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-oadp-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpinfo-oadp
+  template:
+    metadata:
+      labels:
+        app: phpinfo-oadp
+    spec:
+      containers:
+        - name: phpinfo
+          image: index.docker.io/library/php:alpine
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 10m
+              memory: 10M
+            requests:
+              cpu: 10m
+              memory: 10M
+          securityContext:
+              readOnlyRootFilesystem: false
+          volumeMounts:
+            - mountPath: /src/index.php
+              subPath: index.php
+              name: phpinfo-volume
+              readOnly: false
+          workingDir: /src/
+          args:
+            - php
+            - -f
+            - index.php
+            - -S
+            - 0.0.0.0:8080
+      restartPolicy: Always
+      volumes:
+        - name: phpinfo-volume
+          persistentVolumeClaim:
+            claimName: phpinfo-oadp-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: phpinfo-oadp-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ocs-storagecluster-cephfs
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo-oadp-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: phpinfo-oadp
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: phpinfo-oadp-route
+spec:
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: phpinfo-oadp-svc
