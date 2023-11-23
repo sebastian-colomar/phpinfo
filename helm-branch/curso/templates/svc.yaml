@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "phpinfo.fullname" . }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.containers.ports.containerPort }}
+      protocol: {{ .Values.containers.ports.protocol }}
+  selector:
+    {{- include "phpinfo.selectorLabels" . | nindent 4 }}
