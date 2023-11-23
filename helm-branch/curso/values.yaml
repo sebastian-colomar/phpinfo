@@ -40,7 +40,7 @@ volumes:
         - key: index.php
           mode: 0400
           path: index.php
-      name: phpinfo-cm
+      name: phpinfo
     name: phpinfo-volume
 
 image:
