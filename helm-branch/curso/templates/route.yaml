@@ -1,0 +1,10 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "phpinfo-helm.fullname" . }}
+spec:
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: {{ include "phpinfo-helm.fullname" . }}
