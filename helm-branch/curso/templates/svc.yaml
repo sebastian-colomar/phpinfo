@@ -5,8 +5,6 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.containers.ports.containerPort }}
-      protocol: {{ .Values.containers.ports.protocol }}
+    {{- toYaml .Values.service.ports | nindent 4 }}
   selector:
     {{- include "phpinfo.selectorLabels" . | nindent 4 }}
