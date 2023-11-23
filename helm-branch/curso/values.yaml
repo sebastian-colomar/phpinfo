@@ -31,7 +31,7 @@ containers:
 
 cm:
   data:
-    index.php: <?php phpinfo();?>
+    index_php: <?php phpinfo();?>
 
 volumes:
   - configMap:
