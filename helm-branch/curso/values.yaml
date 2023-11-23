@@ -29,6 +29,10 @@ containers:
       subPath: index.php
   workingDir: /app/
 
+cm:
+  data:
+    index.php: <?php phpinfo();?>
+
 volumes:
   - configMap:
       defaultMode: 0400
