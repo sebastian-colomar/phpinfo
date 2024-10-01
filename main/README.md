@@ -18,7 +18,7 @@ echo '<?php phpinfo();?>' | tee index.php
 php -f index.php -S 0.0.0.0:8080
 ```
 ```
-curl localhost:8080/index.php -Is
+curl -Is localhost:8080/index.php
 ```
 
 ## The container
@@ -28,11 +28,11 @@ docker run --cpus 0.01 --memory 10M --memory-reservation 10M --name phpinfo --pu
 ```
 You can test the application from inside the container running the following command:
 ```
-docker exec phpinfo wget http://localhost:8080/index.php -O - -q -S --spider
+docker exec phpinfo curl -Is http://localhost:8080/index.php
 ```
 Or you can test the application from outside the container with the following command:
 ```
-curl localhost:$( docker port phpinfo | cut -d: -f2 )/index.php -Is
+curl -Is localhost:$( docker port phpinfo | cut -d: -f2 )/index.php
 ```
 Or you can just check the container logs:
 ```
