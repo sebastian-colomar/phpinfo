@@ -28,7 +28,7 @@ docker run --cpus 0.01 --memory 10M --memory-reservation 10M --name phpinfo --pu
 ```
 You can test the application from inside the container running the following command:
 ```
-docker exec phpinfo curl -Is http://localhost:8080/index.php
+docker exec phpinfo curl -Is localhost:8080/index.php
 ```
 Or you can test the application from outside the container with the following command:
 ```
