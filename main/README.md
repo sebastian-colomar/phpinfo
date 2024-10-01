@@ -116,7 +116,7 @@ docker-compose top
 ```
 You can test the connection to the web server using the following command:
 ```
-curl -Is localhost:$( docker-compose ps | grep phpinfo | awk '{ print $6 }' | cut -d : -f 2 | cut -d - -f 1 )/index.php
+curl -Is localhost:$( docker-compose port phpinfo 8080 | cut -d : -f 2 )/index.php
 ```
 You can remove the application with the following command:
 ```
