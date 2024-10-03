@@ -51,8 +51,10 @@ jobs:                                                                          #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
+    - name: install
+      run: apt update && apt install -y docker-compose
     - name: docker-compose
-      run: docker-compose up --detach
+      run: docker-compose up --file main/docker-compose.yaml
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
