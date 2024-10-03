@@ -54,7 +54,7 @@ jobs:                                                                          #
     - name: install
       run: sudo apt-get update && sudo apt-get install -y docker-compose
     - name: docker-compose
-      run: docker-compose --detach --file main/docker-compose.yaml up
+      run: docker-compose --file main/docker-compose.yaml up
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
