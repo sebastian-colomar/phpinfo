@@ -9,7 +9,7 @@ on:                                                                            #
     - main                                                                     #
 jobs:                                                                          #
   host:                                                                          #
-    runs-on: ubuntu-18.04                                                      #
+    runs-on: ubuntu-latest                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
@@ -23,7 +23,7 @@ jobs:                                                                          #
             wget -q -O - localhost:8080/src/index.php | grep "PHP.*phpinfo()" && break ;
           done                                                                 ;
   docker:                                                                          #
-    runs-on: ubuntu-18.04                                                      #
+    runs-on: ubuntu-latest                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
@@ -41,7 +41,7 @@ jobs:                                                                          #
             docker logs phpinfo 2>& 1 | grep "PHP.*started" && break ;
           done                                                                 ;
   docker-compose:                                                                          #
-    runs-on: ubuntu-18.04                                                      #
+    runs-on: ubuntu-latest                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
@@ -55,7 +55,7 @@ jobs:                                                                          #
             docker-compose logs 2>& 1 | grep "PHP.*started" && break ;
           done           
   swarm-config:                                                                          #
-    runs-on: ubuntu-18.04                                                      #
+    runs-on: ubuntu-latest                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
@@ -71,7 +71,7 @@ jobs:                                                                          #
             docker service logs phpinfo_phpinfo 2>& 1 | grep "PHP.*started" && break ;
           done           
   swarm-secret:                                                                          #
-    runs-on: ubuntu-18.04                                                      #
+    runs-on: ubuntu-latest                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
@@ -87,7 +87,7 @@ jobs:                                                                          #
             docker service logs phpinfo_phpinfo 2>& 1 | grep "PHP.*started" && break ;
           done           
   swarm-volume:                                                                          #
-    runs-on: ubuntu-18.04                                                      #
+    runs-on: ubuntu-latest                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
@@ -103,7 +103,7 @@ jobs:                                                                          #
             docker service logs phpinfo_phpinfo 2>& 1 | grep "PHP.*started" && break ;
           done           
   kubernetes:                                                                  #
-    runs-on: ubuntu-18.04                                                      #
+    runs-on: ubuntu-latest                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
