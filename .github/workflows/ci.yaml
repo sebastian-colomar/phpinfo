@@ -116,7 +116,10 @@ jobs:                                                                          #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
     - name: cri-dockerd
-      run: sudo apt-get update && sudo apt-get install -y cri-dockerd
+      run: |
+        deb=cri-dockerd_0.3.15.3-0.debian-bookworm_amd64.deb
+        wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.15/${deb}
+        sudo apt-get install ./${deb}
     - name: init                                                               #
       run:                                                                     |
         uuid=$( md5sum /etc/hosts | cut -d\  -f1 )                      ;
