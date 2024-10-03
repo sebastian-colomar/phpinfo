@@ -60,6 +60,7 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
+            docker-compose logs 2>& 1
             docker-compose logs 2>& 1 | grep "PHP.*started" && break ;
           done           
   swarm-config:                                                                          #
