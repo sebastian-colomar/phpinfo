@@ -134,6 +134,7 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
+            kubectl logs deploy/phpinfo-deploy 2>&1
             break
             #kubectl exec phpinfo-po -- curl localhost:8080 | grep "PHP.*phpinfo()" && break
           done                                                                 ;
