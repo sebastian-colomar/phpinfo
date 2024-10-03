@@ -13,6 +13,8 @@ jobs:                                                                          #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
+    - name: os-release
+      run: cat /etc/os-release
     - name: run                                                                #
       run: php -f main/src/index.php -S 0.0.0.0:8080                                &
     - name: test                                                               #
