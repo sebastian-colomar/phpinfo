@@ -115,12 +115,14 @@ jobs:                                                                          #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
+    - name: cri-dockerd
+      run: sudo apt-get update && sudo apt-get install -y cri-dockerd
     - name: init                                                               #
       run:                                                                     |
         uuid=$( md5sum /etc/hosts | cut -d\  -f1 )                      ;
-        git clone --single-branch -b v1.2                                      \
+        git clone --single-branch -b ubuntu22_kubernetes29                                      \
           https://github.com/academiaonline/kubernetes $uuid                   ;
-        path=$uuid/bin/cluster/ubuntu18/install-docker-kubelet.sh              ;
+        path=$uuid/ubuntu22/docker/bin/install-kubelet.sh              ;
         source $path                                                           ;
         path=$uuid/bin/cluster/ubuntu18/install-leader.sh                      ;
         source $path                                                           ;
