@@ -19,6 +19,8 @@ jobs:                                                                          #
       run: php -f main/src/index.php -S 0.0.0.0:8080                                &
     - name: which
       run: which wget && which curl
+    - name: cat
+      run: cat main/src/index.php
     - name: test                                                               #
       run:                                                                     |
         while true                                                             ;
