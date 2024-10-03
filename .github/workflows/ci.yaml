@@ -115,11 +115,19 @@ jobs:                                                                          #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
-    - name: cri-dockerd
+    - name: minikube
+      run: sudo apt-get update && sudo apt-get install -f minikube
+    - name: kubelet
       run: |
-        deb=cri-dockerd_0.3.15.3-0.debian-bookworm_amd64.deb
-        wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.15/${deb}
-        sudo apt-get install ./${deb}
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+        curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+        echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+        sudo apt-get update
+        sudo apt-get install -y kubelet kubeadm kubectl
+        sudo apt-mark hold kubelet kubeadm kubectl
+        sudo systemctl enable --now kubelet
+    - name: 
     - name: init                                                               #
       run:                                                                     |
         uuid=$( md5sum /etc/hosts | cut -d\  -f1 )                      ;
