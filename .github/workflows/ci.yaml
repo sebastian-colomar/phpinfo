@@ -110,7 +110,7 @@ jobs:                                                                          #
             sleep 10                                                           ;
             docker service logs phpinfo_phpinfo 2>& 1 | grep "PHP.*started" && break ;
           done           
-  kubernetes:                                                                  #
+  kube-compose-deploy-cm-alpine:                                                                  #
     runs-on: ubuntu-latest                                                      #
     steps:                                                                     #
     - name: checkout                                                           #
@@ -128,15 +128,32 @@ jobs:                                                                          #
     - name: test                                                               #
       run:                                                                     |
         set -x                                                                 ;
-        kubectl get po -A
-        kubectl get svc -A
-        kubectl get no
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            kubectl logs deploy/phpinfo-deploy 2>&1
-            break
-            #kubectl exec phpinfo-po -- curl localhost:8080 | grep "PHP.*phpinfo()" && break
+            kubectl logs deploy/phpinfo-deploy 2>& 1 | grep "PHP.*started" && break ;
           done                                                                 ;
-        kubectl get all
+  kube-compose-deploy-echo:                                                                  #
+    runs-on: ubuntu-latest                                                      #
+    steps:                                                                     #
+    - name: checkout                                                           #
+      uses: actions/checkout@v2                                                #
+    - name: minikube
+      run: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+        sudo apt-get install ./minikube_latest_amd64.deb
+    - name: init
+      run: minikube start --driver=docker
+    - name: kubectl
+      run: kubectl version
+    - name: apply                                                              #
+      run: kubectl apply -f main/kubernetes/kube-compose-deploy-echo.yaml                                  ;
+    - name: test                                                               #
+      run:                                                                     |
+        set -x                                                                 ;
+        while true                                                             ;
+          do                                                                   \
+            sleep 10                                                           ;
+            kubectl logs deploy/phpinfo-deploy-echo 2>& 1 | grep "PHP.*started" && break ;
+          done                                                                 ;  
 ################################################################################
