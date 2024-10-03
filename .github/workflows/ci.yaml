@@ -52,7 +52,7 @@ jobs:                                                                          #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
     - name: install
-      run: apt update && apt install -y docker-compose
+      run: sudo apt-get update && sudo apt-get install -y docker-compose
     - name: docker-compose
       run: docker-compose up --file main/docker-compose.yaml
     - name: test                                                               #
