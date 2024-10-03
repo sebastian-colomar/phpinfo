@@ -116,34 +116,29 @@ jobs:                                                                          #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
     - name: minikube
-      run: sudo apt-get update && sudo apt-get install -f minikube
-    - name: kubelet
+      run: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+        sudo apt-get install ./minikube_latest_amd64.deb
+    - name: init
+      run: minikube start
+    - name: kubectl
       run: |
         sudo apt-get update
-        sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+        sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
         curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+        sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
         echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+        sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
         sudo apt-get update
-        sudo apt-get install -y kubelet kubeadm kubectl
-        sudo apt-mark hold kubelet kubeadm kubectl
-        sudo systemctl enable --now kubelet
-    - name: init                                                               #
-      run:                                                                     |
-        uuid=$( md5sum /etc/hosts | cut -d\  -f1 )                      ;
-        git clone --single-branch -b ubuntu22_kubernetes29                                      \
-          https://github.com/academiaonline/kubernetes $uuid                   ;
-        path=$uuid/ubuntu22/docker/bin/install-kubelet.sh              ;
-        source $path                                                           ;
-        path=$uuid/bin/cluster/ubuntu18/install-leader.sh                      ;
-        source $path                                                           ;
-        master=$( kubectl get node | grep master | awk '{ print $1 }' )        ;
-        kubectl taint node $master node-role.kubernetes.io/master:NoSchedule-  ;
-        rm -rf $uuid                                                           ;
+        sudo apt-get install -y kubectl        
     - name: apply                                                              #
-      run: kubectl apply -f kubernetes/manifests/                                  ;
+      run: kubectl apply -f main/kubernetes/manifests/                                  ;
     - name: test                                                               #
       run:                                                                     |
         set -x                                                                 ;
+        kubectl get po -A
+        kubectl get svc -A
+        kubectl get no
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
