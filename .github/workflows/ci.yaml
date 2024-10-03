@@ -127,7 +127,6 @@ jobs:                                                                          #
         sudo apt-get install -y kubelet kubeadm kubectl
         sudo apt-mark hold kubelet kubeadm kubectl
         sudo systemctl enable --now kubelet
-    - name: 
     - name: init                                                               #
       run:                                                                     |
         uuid=$( md5sum /etc/hosts | cut -d\  -f1 )                      ;
