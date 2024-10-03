@@ -69,6 +69,10 @@ jobs:                                                                          #
       uses: actions/checkout@v2                                                #
     - name: docker-swarm                                                                #
       run: docker swarm init
+    - name: cd
+      run: cd main/
+    - name: ls
+      run: pwd && ls -l
     - name: docker-stack
       run: docker stack deploy --compose-file main/docker-stack-config.yaml phpinfo
     - name: test                                                               #
