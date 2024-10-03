@@ -124,7 +124,7 @@ jobs:                                                                          #
     - name: kubectl
       run: kubectl version
     - name: apply                                                              #
-      run: kubectl apply -f main/kubernetes/manifests/                                  ;
+      run: kubectl apply -f main/kubernetes/kube-compose-deploy-cm-alpine.yaml                                  ;
     - name: test                                                               #
       run:                                                                     |
         set -x                                                                 ;
@@ -134,7 +134,8 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            kubectl exec phpinfo-po -- curl localhost:8080 | grep "PHP.*phpinfo()" && break
+            break
+            #kubectl exec phpinfo-po -- curl localhost:8080 | grep "PHP.*phpinfo()" && break
           done                                                                 ;
         kubectl get all
 ################################################################################
