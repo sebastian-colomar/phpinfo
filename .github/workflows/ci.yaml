@@ -122,19 +122,7 @@ jobs:                                                                          #
     - name: init
       run: minikube start --driver=docker
     - name: kubectl
-      run: |
-        sudo apt-get update
-        which kubectl
-        sudo apt-get install kubectl
-        sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
-        sudo mkdir -p /etc/apt/keyrings
-        sudo chmod 755 /etc/apt/keyrings
-        curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --batch --yes --no-tty --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-        sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-        echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-        sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
-        sudo apt-get update
-        sudo apt-get install -y kubectl
+      run: kubectl version
     - name: apply                                                              #
       run: kubectl apply -f main/kubernetes/manifests/                                  ;
     - name: test                                                               #
@@ -146,7 +134,7 @@ jobs:                                                                          #
         while true                                                             ;
           do                                                                   \
             sleep 10                                                           ;
-            kubectl exec phpinfo-po -- wget -q -O - localhost:8080 | grep "PHP.*phpinfo()" && break
+            kubectl exec phpinfo-po -- curl localhost:8080 | grep "PHP.*phpinfo()" && break
           done                                                                 ;
         kubectl get all
 ################################################################################
