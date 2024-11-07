@@ -29,14 +29,14 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext:
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
   # runAsUser: 1000
-  runAsUser: 65534
-  runAsGroup: 65534
+  #runAsUser: 65534
+  #runAsGroup: 65534
 
 service:
   type: NodePort
