@@ -8,7 +8,7 @@ spec:
   - list:
       elements:
       - cluster: '1'
-      - cluster: '2'
+      #- cluster: '2'
   syncPolicy:
     preserveResourcesOnDeletion: true
   template:
