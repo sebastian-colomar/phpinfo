@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: phpinfo-helm
+  namespace: openshift-gitops
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: '1'
+      - cluster: '2'
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      labels:
+        applicationset: phpinfo-deployments
+      name: phpinfo-helm-{{ cluster }}
+    spec:
+      destination:
+        namespace: phpinfo-helm-{{ cluster }}
+        server: 'https://kubernetes.default.svc'
+      project: default
+      source:
+        helm:
+          valueFiles:
+          - values.phpinfo-helm-{{ cluster }}.yaml
+        path: main/helm
+        repoURL: https://github.com/sebastian-colomar/phpinfo.git
+        targetRevision: HEAD
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: false
+        syncOptions:
+        - ApplyOutOfSyncOnly=true
+        - CreateNamespace=true
