@@ -1,0 +1,17 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: php-base
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: 'docker.io/academiaonline/php-base:latest'
+      generation: 2
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Local
