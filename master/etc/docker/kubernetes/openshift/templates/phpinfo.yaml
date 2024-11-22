@@ -22,16 +22,16 @@ objects:
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: phpinfo-deploy
+      name: ${APP_NAME}-deploy
     spec:
-      replicas: 1
+      replicas: '${APP_REPLICAS}'
       selector:
         matchLabels:
-          app: phpinfo
+          app: ${APP_LABEL}
       template:
         metadata:
           labels:
-            app: phpinfo
+            app: ${APP_LABEL}
         spec:
           containers:
           -
@@ -134,4 +134,21 @@ parameters:
     name: MEMORY_REQUEST
     required: true
     value: 16Mi
-    
+  -
+    description: Application name
+    displayName: Application name
+    name: APP_NAME
+    required: true
+    value: phpinfo
+  -
+    description: Number of replicas
+    displayName: Number of replicas
+    name: APP_REPLICAS
+    required: true
+    value: '1'
+  - 
+    description: Application label
+    displayName: Application label
+    name: APP_LABEL
+    required: true
+    value: phpinfo
