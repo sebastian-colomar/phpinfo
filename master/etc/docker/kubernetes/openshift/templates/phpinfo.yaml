@@ -24,7 +24,7 @@ objects:
     metadata:
       name: ${APP_NAME}-deploy
     spec:
-      replicas: '${APP_REPLICAS}'
+      replicas: ${APP_REPLICAS}
       selector:
         matchLabels:
           app: ${APP_LABEL}
@@ -145,7 +145,7 @@ parameters:
     displayName: Number of replicas
     name: APP_REPLICAS
     required: true
-    value: '1'
+    value: 1
   - 
     description: Application label
     displayName: Application label
