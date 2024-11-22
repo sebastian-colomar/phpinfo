@@ -16,7 +16,6 @@ metadata:
     app: phpinfo
     samples.operator.openshift.io/managed: 'true'
   name: phpinfo
-  namespace: openshift
 message: 'PHP Info is now deployed.'
 objects:
   -
