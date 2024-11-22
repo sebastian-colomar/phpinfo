@@ -6,12 +6,10 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   annotations:
-    description: >-
-      PHP Info
+    description: PHP Info
     iconClass: icon-php
     openshift.io/display-name: 'PHP Info'
     openshift.io/provider-display-name: 'Sebastian Colomar'
-    samples.operator.openshift.io/version: 4.5.2
     tags: 'php,phpinfo'
     version: '${APP_VERSION}'
   labels:
