@@ -24,7 +24,7 @@ objects:
     metadata:
       name: ${APP_NAME}-deploy
     spec:
-      replicas: ${APP_REPLICAS}
+      replicas: 1
       selector:
         matchLabels:
           app: ${APP_LABEL}
@@ -140,12 +140,6 @@ parameters:
     name: APP_NAME
     required: true
     value: phpinfo
-  -
-    description: Number of replicas
-    displayName: Number of replicas
-    name: APP_REPLICAS
-    required: true
-    value: '1'
   - 
     description: Application label
     displayName: Application label
