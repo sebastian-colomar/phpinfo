@@ -145,7 +145,7 @@ parameters:
     displayName: Number of replicas
     name: APP_REPLICAS
     required: true
-    value: 1
+    value: '1'
   - 
     description: Application label
     displayName: Application label
