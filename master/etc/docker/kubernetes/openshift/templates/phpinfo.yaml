@@ -24,7 +24,7 @@ objects:
     metadata:
       name: ${APP_NAME}-deploy
     spec:
-      replicas: ${APP_REPLICAS | int}
+      replicas: ${APP_REPLICAS}
       selector:
         matchLabels:
           app: ${APP_LABEL}
