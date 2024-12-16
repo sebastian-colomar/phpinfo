@@ -115,6 +115,8 @@ jobs:                                                                          #
     steps:                                                                     #
     - name: checkout                                                           #
       uses: actions/checkout@v2                                                #
+    - name: id
+      run: id
     - name: minikube
       run: |
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
