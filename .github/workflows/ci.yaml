@@ -179,6 +179,6 @@ jobs:                                                                          #
         while true
           do
             sleep 10
-            kubectl logs po phpinfo-po 2>&1|grep "PHP.*started" && break
+            kubectl logs phpinfo-po 2>&1|grep "PHP.*started" && break
           done
 ################################################################################
