@@ -157,5 +157,28 @@ jobs:                                                                          #
           do                                                                   \
             sleep 10                                                           ;
             kubectl logs deploy/phpinfo-deploy-echo 2>& 1 | grep "PHP.*started" && break ;
-          done                                                                 ;  
+          done                                                                 ;
+  test-po:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: minikube
+      run: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+        sudo apt-get install ./minikube_latest_amd64.deb
+    - name: init
+      run: minikube start --driver=docker
+    - name: apply-cm
+      run: kubectl apply -f main/kubernetes/manifests/phpinfo-cm.yaml
+    - name: apply-po
+      run: kubectl apply -f main/kubernetes/manifests/phpinfo-po.yaml
+    - name: test
+      run: |
+        set -x
+        while true
+          do
+            sleep 10
+            kubectl logs po phpinfo-po 2>&1|grep "PHP.*started" && break
+          done
 ################################################################################
