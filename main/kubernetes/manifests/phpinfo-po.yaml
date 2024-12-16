@@ -2,13 +2,22 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: phpinfo-po
   labels:
     app: phpinfo-po
+  name: phpinfo-po
 spec:
   containers:
-    - name: phpinfo
+    - args:
+        - php
+        - -f
+        - index.php
+        - -S
+        - 0.0.0.0:8080
+      env:
+        - name: AUTHOR
+          value: Sebastian
       image: 'index.docker.io/library/php:alpine@sha256:ab23b416d86aec450ee7b75727f6bbec272edc2764a1b6fad13bc2823c59bb6b'
+      name: phpinfo
       ports:
         - containerPort: 8080
           protocol: TCP
@@ -19,9 +28,6 @@ spec:
         requests:
           cpu: 100m
           memory: 100M
-      env:
-        - name: AUTHOR
-          value: Sebastian
       securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 65534
@@ -32,12 +38,6 @@ spec:
           name: phpinfo-volume
           readOnly: true
       workingDir: /data/
-      args:
-        - php
-        - -f
-        - index.php
-        - -S
-        - 0.0.0.0:8080
   restartPolicy: Always
   securityContext:
     fsGroup: 65534
@@ -47,6 +47,6 @@ spec:
           defaultMode: 0400
           items:
             - key: index.php
-              path: index.php
               mode: 0400
+              path: index.php
           name: phpinfo-cm
