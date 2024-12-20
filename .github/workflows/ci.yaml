@@ -210,6 +210,7 @@ jobs:                                                                          #
         while true
           do
             sleep 10
+            oc logs dc/phpinfo-dc 2>&1
             oc logs dc/phpinfo-dc 2>&1|grep "PHP.*started" && break
           done 
 ################################################################################
