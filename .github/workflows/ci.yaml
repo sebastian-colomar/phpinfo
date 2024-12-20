@@ -181,4 +181,35 @@ jobs:                                                                          #
             sleep 10
             kubectl logs phpinfo-po 2>&1|grep "PHP.*started" && break
           done
+  oc:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: oc
+      run: |
+        wget https://downloads-openshift-console.apps.openshift.sebastian-colomar.es/amd64/linux/oc.tar
+        tar xf oc.tar
+        sudo cp oc /usr/local/bin
+        oc version
+    - name: login
+      env:
+        OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_URL }}
+        OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+      run: |
+        oc login "${OPENSHIFT_URL}" --token="${OPENSHIFT_TOKEN}"
+    - name: deploy
+      env:
+        OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+      run: |
+        oc project "${OPENSHIFT_NAMESPACE}"
+        oc apply -f main/openshift/manifests/phpinfo-dc.yaml
+    - name: test
+      run: |
+        set -x
+        while true
+          do
+            sleep 10
+            oc logs dc/phpinfo-dc 2>&1|grep "PHP.*started" && break
+          done 
 ################################################################################
