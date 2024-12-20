@@ -197,12 +197,12 @@ jobs:                                                                          #
         OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_URL }}
         OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
       run: |
-        echo oc login "${OPENSHIFT_URL}" --token="${OPENSHIFT_TOKEN}"
+        oc -v=9 login --server="${OPENSHIFT_URL}" --token="${OPENSHIFT_TOKEN}"
     - name: deploy
       env:
         OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
       run: |
-        echo oc project "${OPENSHIFT_NAMESPACE}"
+        oc project "${OPENSHIFT_NAMESPACE}"
         oc apply -f main/openshift/manifests/phpinfo-dc.yaml
     - name: test
       run: |
