@@ -203,6 +203,7 @@ jobs:                                                                          #
         OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
       run: |
         oc project "${OPENSHIFT_NAMESPACE}"
+        oc apply -f main/kubernetes/manifests/phpinfo-cm.yaml
         oc apply -f main/openshift/manifests/phpinfo-dc.yaml
     - name: test
       run: |
