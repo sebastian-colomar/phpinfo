@@ -24,8 +24,8 @@ spec:
               cpu: 100m
               memory: 100M
             requests:
-              cpu: 100m
-              memory: 100M
+              cpu: 10m
+              memory: 10M
           env:
             - name: AUTHOR
               value: Sebastian
