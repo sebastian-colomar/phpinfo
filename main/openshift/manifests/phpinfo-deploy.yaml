@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: phpinfo
+  template:
+    metadata:
+      labels:
+        app: phpinfo
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: phpinfo
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: phpinfo
+      containers:
+      - command:
+        - php
+        - -f
+        - index.php
+        - -S
+        - 0.0.0.0:9000
+        image: php
+        name: phpinfo
+        ports:
+        - containerPort: 9000
+        resources:
+          limits:
+            cpu: 40m
+            memory: 40M
+          requests:
+            cpu: 20m
+            memory: 20M
+        securityContext:
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /var/data/index.php
+          name: phpinfo
+          readOnly: true
+          subPath: index.php
+        - mountPath: /var/data/tmp/
+          name: tmp
+          readOnly: false
+        workingDir: /var/data/
+      initContainers:
+      - args:
+        - echo '<?php phpinfo();?>' 1> index.php
+        command:
+        - sh
+        - -c
+        image: busybox
+        name: echo
+        volumeMounts:
+        - name: phpinfo-volume
+          mountPath: /tmp/
+          readOnly: false
+        workingDir: /tmp/
+      volumes:
+      - configMap:
+          defaultMode: 0400
+          items: 
+          - key: index.php
+            mode: 0400
+            path: index.php
+          name: phpinfo
+        name: phpinfo
+      - emptyDir:
+          medium: Memory
+          sizeLimit: 1M
+        name: tmp
