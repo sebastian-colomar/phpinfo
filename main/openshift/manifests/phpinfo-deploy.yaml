@@ -46,35 +46,29 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
         volumeMounts:
-        - mountPath: /var/data/index.php
+        - mountPath: /data
           name: phpinfo
           readOnly: true
-          subPath: index.php
-        - mountPath: /var/data/tmp/
+        - mountPath: /tmp
           name: tmp
           readOnly: false
-        workingDir: /var/data/
+        workingDir: /data
       initContainers:
       - args:
-        - echo '<?php phpinfo();?>' 1> index.php
+        - echo '<?php phpinfo();?>' >index.php
         command:
         - sh
         - -c
         image: busybox
         name: echo
         volumeMounts:
-        - name: phpinfo-volume
-          mountPath: /tmp/
+        - name: phpinfo
+          mountPath: /data
           readOnly: false
-        workingDir: /tmp/
+        workingDir: /data
       volumes:
-      - configMap:
-          defaultMode: 0400
-          items: 
-          - key: index.php
-            mode: 0400
-            path: index.php
-          name: phpinfo
+      - emptyDir:
+          sizeLimit: 1M
         name: phpinfo
       - emptyDir:
           medium: Memory
