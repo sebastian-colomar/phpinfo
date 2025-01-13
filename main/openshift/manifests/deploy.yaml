@@ -88,8 +88,8 @@ spec:
         image: busybox
         name: echo
         volumeMounts:
-        - name: phpinfo
-          mountPath: /data
+        - mountPath: /data
+          name: phpinfo
           # Specifies writable mode for this volume, while the same volume is mounted in read-only mode by the main container.
           readOnly: false
         workingDir: /data
