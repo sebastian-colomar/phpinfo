@@ -15,29 +15,6 @@ spec:
       labels:
         app: phpinfo
     spec:
-      topologySpreadConstraints:
-      - labelSelector:
-          matchLabels:
-            app: phpinfo
-        # maxSkew is the parameter used to evenly distribute workloads across specified topology keys.  
-        # When maxSkew is set to 1, the workload is balanced such that the difference between the highest and lowest workload across topological regions does not exceed 1 unit.
-        maxSkew: 1
-        # In this configuration, the topology key represents an availability zone, such as a distinct data center.
-        topologyKey: topology.kubernetes.io/zone
-        # If the scheduler cannot find an available worker node in the specified availability zone, the replica will not be scheduled.  
-        # This may block the deployment if no nodes are available, but it is essential to maintain high availability and resilience.  
-        whenUnsatisfiable: DoNotSchedule
-      - labelSelector:
-          matchLabels:
-            app: phpinfo
-        # maxSkew is the parameter used to evenly distribute workloads across specified topology keys.  
-        # When maxSkew is set to 1, the workload is balanced such that the difference between the highest and lowest workload across topological regions does not exceed 1 unit.
-        maxSkew: 1
-        # In this configuration, the topology key represents a hostname, indicating a specific worker node.
-        topologyKey: kubernetes.io/hostname
-        # If the scheduler cannot find an available worker node, the replica will not be scheduled.
-        # This behavior may block the deployment if no nodes are available, but it ensures high availability and resilience.
-        whenUnsatisfiable: DoNotSchedule
       containers:
       - command:
         - php
@@ -93,6 +70,29 @@ spec:
           # Specifies writable mode for this volume, while the same volume is mounted in read-only mode by the main container.
           readOnly: false
         workingDir: /data
+      topologySpreadConstraints:
+      - labelSelector:
+          matchLabels:
+            app: phpinfo
+        # maxSkew is the parameter used to evenly distribute workloads across specified topology keys.  
+        # When maxSkew is set to 1, the workload is balanced such that the difference between the highest and lowest workload across topological regions does not exceed 1 unit.
+        maxSkew: 1
+        # In this configuration, the topology key represents an availability zone, such as a distinct data center.
+        topologyKey: topology.kubernetes.io/zone
+        # If the scheduler cannot find an available worker node in the specified availability zone, the replica will not be scheduled.  
+        # This may block the deployment if no nodes are available, but it is essential to maintain high availability and resilience.  
+        whenUnsatisfiable: DoNotSchedule
+      - labelSelector:
+          matchLabels:
+            app: phpinfo
+        # maxSkew is the parameter used to evenly distribute workloads across specified topology keys.  
+        # When maxSkew is set to 1, the workload is balanced such that the difference between the highest and lowest workload across topological regions does not exceed 1 unit.
+        maxSkew: 1
+        # In this configuration, the topology key represents a hostname, indicating a specific worker node.
+        topologyKey: kubernetes.io/hostname
+        # If the scheduler cannot find an available worker node, the replica will not be scheduled.
+        # This behavior may block the deployment if no nodes are available, but it ensures high availability and resilience.
+        whenUnsatisfiable: DoNotSchedule
       volumes:
       - # emptyDir is a type of volume that uses the worker node's local filesystem, creating a subdirectory in the same directory structure as the pod's storage location.
         emptyDir:
