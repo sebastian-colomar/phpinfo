@@ -54,14 +54,14 @@ spec:
           # Limits are set higher than requests, effectively overcommitting resources.
           # This approach carries some risk because if all containers simultaneously utilize resources up to their limits, the node could exceed its capacity, potentially triggering the OOM killer or causing CPU throttling.
           limits:
-            cpu: 40m
-            memory: 40M        
+            cpu: 100m
+            memory: 100M        
           # Requests define the minimum CPU and memory resources required to schedule the replica.
           # A replica will not be scheduled if sufficient resources are not available on the node to meet the requests.
           # However, these resources are not reserved for the replica. The scheduler only ensures they are available at the time of scheduling.
           requests:
-            cpu: 20m
-            memory: 20M
+            cpu: 10m
+            memory: 10M
         securityContext:
           # This setting makes the container's filesystem read-only.
           # It is considered a best practice for enhancing security.
@@ -99,13 +99,12 @@ spec:
           # To prevent disk exhaustion, it is recommended to set a limit on the maximum size the pod can consume from the local filesystem.
           sizeLimit: 1M
         name: phpinfo
-      - # emptyDir is a type of volume that uses the worker node's local filesystem, creating a subdirectory in the same directory structure as the pod's storage location.
+      - # emptyDir is a type of volume that creates a temporary directory for the pod, either on the node's local filesystem or in memory.
         emptyDir:
-          # The "medium: Memory" option allows the emptyDir volume to use a tmpfs (RAM-backed filesystem) 
-          # instead of the worker node's disk. This can significantly improve performance for I/O-intensive 
-          # workloads and enhances security by ensuring the data resides only in memory and is cleared 
-          # upon pod termination.
+          # Setting "medium: Memory" uses a tmpfs (RAM-backed filesystem) for the volume instead of the node's local disk.
+          # This improves performance for I/O-intensive workloads and enhances security, as data resides in memory and is cleared when the pod terminates.
           medium: Memory
-          # To prevent disk exhaustion, it is recommended to set a limit on the maximum size the pod can consume from the local filesystem.
+          # Setting a size limit is critical to prevent memory exhaustion. This limit specifies the maximum memory the pod can use for this volume.
+          # Note that the memory used by the volume counts toward the pod's total memory usage, which includes the container's memory requests and limits.
           sizeLimit: 1M
         name: tmp
