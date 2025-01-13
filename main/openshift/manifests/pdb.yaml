@@ -1,8 +1,18 @@
 apiVersion: policy/v1
+# The PodDisruptionBudget (PDB) is a crucial resource for protecting replicas of production-critical applications.
+# It ensures a minimum number of replicas remain available during disruptions.
+# However, misconfiguration of PDB can lead to operational issues.
+# For example, a PDB should always be configured alongside high availability using topology spread constraints.
+# Without proper topology spread constraints, a PDB can prevent replica eviction, potentially blocking cluster operations.
+# For instance, during cluster upgrades requiring pod evictions to reboot nodes, the PDB may block evictions if only one replica is available or if all replicas are running on the same node.
+# To use PDB effectively, it is essential to configure high availability with proper topology spread constraints.
 kind: PodDisruptionBudget
 metadata:
   name: phpinfo
 spec:
+  # Setting a minimum availability of 1 ensures that at least one replica is protected from eviction.
+  # However, to use this configuration effectively, there must always be at least two replicas available.
+  # If this condition cannot be guaranteed, this setting should not be used.
   minAvailable: 1
   selector:
     matchLabels:
