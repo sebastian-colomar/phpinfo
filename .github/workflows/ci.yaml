@@ -188,8 +188,8 @@ jobs:                                                                          #
       uses: actions/checkout@v2
     - name: oc
       run: |
-        wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
-        tar fxz openshift-client-linux.tar.gz
+        wget https://downloads-openshift-console.apps.openshift.sebastian-colomar.es/amd64/linux/oc.tar
+        tar xf oc.tar
         sudo cp oc /usr/local/bin
         oc version
     - name: login
