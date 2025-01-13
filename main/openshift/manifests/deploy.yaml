@@ -49,7 +49,7 @@ spec:
         name: phpinfo
         ports:
         - containerPort: 9000
-        # It is highly recommended to configure resources limitations to avoid any container can request too much memory or CPU from the host node
+        # It is highly recommended to configure resource limits to prevent any container from consuming excessive memory or CPU on the host node.
         resources:
           # Limits are set higher than requests, effectively overcommitting resources.
           # This approach carries some risk because if all containers simultaneously utilize resources up to their limits, the node could exceed its capacity, potentially triggering the OOM killer or causing CPU throttling.
@@ -68,15 +68,19 @@ spec:
           # If your application requires writing to the container's filesystem, you must mount a writable temporary filesystem for that purpose.
           readOnlyRootFilesystem: true
         volumeMounts:
-        - mountPath: /data
+        - # This volume mount, which contains the application data, is set to read-only mode as write access is not required.
+          mountPath: /data
           name: phpinfo
           readOnly: true
-        - mountPath: /tmp
+        - # This volume mount is writable to provide write access to a temporary filesystem.
+          mountPath: /tmp
           name: tmp
           readOnly: false
+        # Specifies the working directory to prevent the main application from running in the root directory.
         workingDir: /data
       initContainers:
-      - args:
+      - # The initContainer is used to prepare the application data by utilizing a writable mount of the data volume, which will later be accessed as read-only by the main container.
+        args:
         - echo '<?php phpinfo();?>' >index.php
         command:
         - sh
@@ -86,13 +90,22 @@ spec:
         volumeMounts:
         - name: phpinfo
           mountPath: /data
+          # Specifies writable mode for this volume, while the same volume is mounted in read-only mode by the main container.
           readOnly: false
         workingDir: /data
       volumes:
-      - emptyDir:
+      - # emptyDir is a type of volume that uses the worker node's local filesystem, creating a subdirectory in the same directory structure as the pod's storage location.
+        emptyDir:
+          # To prevent disk exhaustion, it is recommended to set a limit on the maximum size the pod can consume from the local filesystem.
           sizeLimit: 1M
         name: phpinfo
-      - emptyDir:
+      - # emptyDir is a type of volume that uses the worker node's local filesystem, creating a subdirectory in the same directory structure as the pod's storage location.
+        emptyDir:
+          # The "medium: Memory" option allows the emptyDir volume to use a tmpfs (RAM-backed filesystem) 
+          # instead of the worker node's disk. This can significantly improve performance for I/O-intensive 
+          # workloads and enhances security by ensuring the data resides only in memory and is cleared 
+          # upon pod termination.
           medium: Memory
+          # To prevent disk exhaustion, it is recommended to set a limit on the maximum size the pod can consume from the local filesystem.
           sizeLimit: 1M
         name: tmp
