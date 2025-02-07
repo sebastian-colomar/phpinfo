@@ -229,3 +229,108 @@ You can remove the application with the following command:
 ```
 docker stack rm phpinfo
 ```
+## The Kubernetes orchestrator
+
+We previously used Docker Swarm as the container orchestrator. In this section, we will use Kubernetes instead.
+
+1. Login to the Kubernetes playground with your Docker account and start a new session:
+
+   * https://labs.play-with-k8s.com/
+1. Add a new instance and initialize the kubernetes cluster master node:
+
+   ```
+   kubeadm init --apiserver-advertise-address $(hostname -i) --pod-network-cidr 10.5.0.0/16
+   ```
+1. Initialize the cluster networking:
+
+   ```
+   kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
+   ```
+
+Now we can deploy our application using this new platform with the following compose file:
+```
+tee kube-stack.yaml 0<<EOF
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: phpinfo-cm
+data:
+  index.php: |-
+    <?php
+      phpinfo();
+    ?>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-deploy
+spec:
+  selector:
+    matchLabels:
+      app: phpinfo-deploy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: phpinfo-deploy
+    spec:
+      containers:
+        - name: phpinfo
+          image: index.docker.io/library/php:alpine
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100M
+            requests:
+              cpu: 10m
+              memory: 10M
+          env:
+            - name: AUTHOR
+              value: Sebastian
+          securityContext:
+              readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /src/index.php
+              subPath: index.php
+              name: phpinfo-volume
+              readOnly: true
+          workingDir: /src/
+          args:
+            - php
+            - -f
+            - index.php
+            - -S
+            - 0.0.0.0:8080
+      restartPolicy: Always
+      volumes:
+        - name: phpinfo-volume
+          configMap:
+              defaultMode: 0400
+              items:
+                - key: index.php
+                  path: index.php
+                  mode: 0400
+              name: phpinfo-cm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo-svc
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: phpinfo-deploy
+  type: NodePort
+---
+
+EOF
+```
+
+
