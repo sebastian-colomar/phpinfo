@@ -332,5 +332,8 @@ spec:
 
 EOF
 ```
-
+You can deploy the application using the following command:
+```
+kubectl apply -f kube-stack.yaml
+```
 
