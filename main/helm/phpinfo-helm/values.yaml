@@ -39,6 +39,7 @@ securityContext:
   #runAsGroup: 65534
 
 service:
+  name: otracosa
   type: NodePort
   port: 80
   targetPort: 8080
