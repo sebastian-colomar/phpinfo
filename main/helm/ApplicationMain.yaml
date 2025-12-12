@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: phpinfo-helm
+spec:
+  destination:
+    namespace: phpinfo-provider-aws-helm
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: main/helm/apps
+    repoURL: https://github.com/sebastian-colomar/phpinfo.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true
