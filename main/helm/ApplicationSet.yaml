@@ -14,24 +14,24 @@ spec:
   template:
     metadata:
       labels:
-        applicationset: phpinfo-deployments
-      name: phpinfo-helm-{{ cluster }}
+        applicationset: phpinfo-provider-aws-helm
+      name: phpinfo-provider-aws-helm-{{ cluster }}
     spec:
       destination:
-        namespace: phpinfo-helm-{{ cluster }}
+        namespace: provider-aws-helm-{{ cluster }}
         server: 'https://kubernetes.default.svc'
       project: default
       source:
         helm:
           valueFiles:
-          - values.phpinfo-helm-{{ cluster }}.yaml
-        path: main/helm
+          - values.yaml
+        path: main/helm/provider-aws-helm-{{ cluster }}
         repoURL: https://github.com/sebastian-colomar/phpinfo.git
         targetRevision: HEAD
       syncPolicy:
         automated:
           prune: true
-          selfHeal: false
+          selfHeal: true
         syncOptions:
         - ApplyOutOfSyncOnly=true
         - CreateNamespace=true
