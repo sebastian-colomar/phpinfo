@@ -4,7 +4,7 @@ metadata:
   name: phpinfo-helm
 spec:
   destination:
-    namespace: phpinfo-provider-aws-helm
+    namespace: phpinfo-helm
     server: https://kubernetes.default.svc
   project: default
   source:
