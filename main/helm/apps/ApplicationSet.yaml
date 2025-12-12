@@ -24,8 +24,8 @@ spec:
       source:
         helm:
           valueFiles:
-          - values.yaml
-        path: main/helm/provider-aws-helm-{{ cluster }}
+          - provider-aws-helm-{{ cluster }}/values.yaml
+        path: main/helm/
         repoURL: https://github.com/sebastian-colomar/phpinfo.git
         targetRevision: HEAD
       syncPolicy:
