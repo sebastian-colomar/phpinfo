@@ -7,24 +7,24 @@ spec:
   generators:
   - list:
       elements:
-      - cluster: '1'
-      - cluster: '2'
+      - env: '1'
+      - env: '2'
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
   template:
     metadata:
       labels:
-        applicationset: phpinfo-provider-aws-helm
-      name: phpinfo-provider-aws-helm-{{ cluster }}
+        applicationset: phpinfo-helm
+      name: phpinfo-helm-{{ env }}
     spec:
       destination:
-        namespace: provider-aws-helm-{{ cluster }}
+        namespace: phpinfo-helm-{{ env }}
         server: 'https://kubernetes.default.svc'
       project: default
       source:
         helm:
           valueFiles:
-          - provider-aws-helm-{{ cluster }}/values.yaml
+          - phpinfo-helm-{{ env }}/values.yaml
         path: main/helm/
         repoURL: https://github.com/sebastian-colomar/phpinfo.git
         targetRevision: HEAD
