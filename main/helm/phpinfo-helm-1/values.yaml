@@ -2,8 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-namespace: phpinfo-helm-1
-
 replicaCount: 2
 
 image:
