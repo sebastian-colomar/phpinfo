@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: phpinfo-helm
-  namespace: openshift-gitops
+  namespace: phpinfo-helm
 spec:
   generators:
   - list:
