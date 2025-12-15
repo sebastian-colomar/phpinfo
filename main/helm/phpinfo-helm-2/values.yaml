@@ -43,6 +43,7 @@ service:
   port: 80
   targetPort: 8080
   protocol: TCP
+  name: phpinfo
 
 ingress:
   enabled: false
