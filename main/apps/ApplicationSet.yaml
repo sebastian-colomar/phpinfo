@@ -1,37 +1,34 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: phpinfo-helm
+  name: phpinfo-helm-provider-aws-helm-odds
   namespace: openshift-gitops
 spec:
   generators:
-  - list:
-      elements:
-      - env: '1'
-      - env: '2'
-  syncPolicy:
-    preserveResourcesOnDeletion: false
+  - clusterDecisionResource:
+      configMapRef: acm-placement
+      labelSelector:
+        matchLabels:
+          cluster.open-cluster-management.io/placement: provider-aws-helm-odds
   template:
     metadata:
-      labels:
-        applicationset: phpinfo-helm
-      name: phpinfo-helm-{{ env }}
+      name: phpinfo-helm-{{name}}
     spec:
-      destination:
-        namespace: phpinfo-helm-{{ env }}
-        server: 'https://kubernetes.default.svc'
       project: default
       source:
         helm:
           valueFiles:
-          - phpinfo-helm-{{ env }}/values.yaml
-        path: main/helm/
-        repoURL: https://github.com/sebastian-colomar/phpinfo.git
+          - values.yaml
+        path: main/apps/helm
+        repoURL: https://github.com/sebastian-colomar/phpinfo
         targetRevision: HEAD
+      destination:
+        server: "{{server}}"
+        namespace: phpinfo-helm-{{name}}
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
         syncOptions:
-        - ApplyOutOfSyncOnly=true
         - CreateNamespace=true
+        - ServerSideApply=true
